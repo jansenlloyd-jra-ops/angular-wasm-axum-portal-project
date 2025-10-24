@@ -1,0 +1,10 @@
+/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/deps/log-24541b67d9d7d186.d: /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/lib.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/macros.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/serde.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/__private_api.rs
+
+/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/deps/liblog-24541b67d9d7d186.rlib: /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/lib.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/macros.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/serde.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/__private_api.rs
+
+/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/deps/liblog-24541b67d9d7d186.rmeta: /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/lib.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/macros.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/serde.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/__private_api.rs
+
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/lib.rs:
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/macros.rs:
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/serde.rs:
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.28/src/__private_api.rs:

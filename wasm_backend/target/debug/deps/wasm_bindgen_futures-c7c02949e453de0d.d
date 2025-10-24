@@ -1,0 +1,7 @@
+/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/deps/wasm_bindgen_futures-c7c02949e453de0d.d: /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-futures-0.4.54/src/lib.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-futures-0.4.54/src/queue.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-futures-0.4.54/src/task/singlethread.rs
+
+/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/deps/libwasm_bindgen_futures-c7c02949e453de0d.rmeta: /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-futures-0.4.54/src/lib.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-futures-0.4.54/src/queue.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-futures-0.4.54/src/task/singlethread.rs
+
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-futures-0.4.54/src/lib.rs:
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-futures-0.4.54/src/queue.rs:
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/wasm-bindgen-futures-0.4.54/src/task/singlethread.rs:
