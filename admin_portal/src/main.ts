@@ -4,7 +4,7 @@ import { App } from './app/app';
 import init from './assets/wasm_backend/wasm_backend.js';
 
 async function main() {
-  await init();
+  await init('./assets/wasm_backend/wasm_backend_bg.wasm');
   await bootstrapApplication(App, appConfig);
 
 }

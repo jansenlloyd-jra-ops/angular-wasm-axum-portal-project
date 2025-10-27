@@ -1,7 +1,12 @@
-// :host {
-//   display: flex;
-//   flex-flow: column;
-//   gap: 1em;
+:host {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  display: flex;
+  flex-flow: column;
+  gap: 1em;
+}
 
 //   input {
 //     width: 10em;
@@ -66,8 +71,9 @@
   border: 1px solid #ddd;
   border-radius: 10px;
   padding: 20px;
-  width: 320px;
+  width: 480px;
   text-align: center;
+  margin: 5px 5px 5px 5px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -78,15 +84,17 @@
   margin-bottom: 10px;
 }
 
+
 /* Center textarea */
 textarea {
   display: block;
-  margin: 0 auto 10px auto; /* centers it horizontally */
-  width: 90%; /* slightly smaller than column width */
+  align-items: center;
+  width: 100%;
+  /* slightly smaller than column width */
   resize: none;
   border-radius: 5px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
-  padding: 8px;
   font-family: monospace;
   background: #f9f9f9;
 }
@@ -112,7 +120,8 @@ pre {
   padding: 10px;
   border-radius: 5px;
   overflow-x: auto;
-  font-size: 13px;
+  font-size: 14px;
+  color: forestgreen;
   width: 90%;
   margin: 0 auto;
 }

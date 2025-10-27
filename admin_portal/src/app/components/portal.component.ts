@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, type OnInit, signal } from '@angular/core';
-import { send_config } from '../../assets/wasm_backend/wasm_backend.js';
+import { send_config, kms_config_request } from '../../assets/wasm_backend/wasm_backend.js';
 import { FormsModule } from '@angular/forms';
 import init from '../../assets/wasm_backend/wasm_backend.js';
 
@@ -127,47 +127,120 @@ export class PortalComponent implements OnInit {
   // }
   serveTime = signal<string>('');
   serverResponse: any = {};
-  configResponse: any = {};
+  configResponse: any = { google: {}, aws: {}, azure: {} };
   serveTimeResp = signal<string>('');
   requesting = signal<boolean>(false);
   signin = signal<boolean>(true);
 
-  jsonInput = JSON.stringify(
-    {
-      provider: "google",
-      scope: "openid email profile",
-      type: "oidc",
-      client_id: "181370640671-rb2l88739bspe0ifbnsq7inoniqu4mgu.apps.googleusercontent.com",
-      client_secret: "",
-      discovery_url: "https://accounts.google.com/.well-known/openid-configuration",
-      redirect_uri: "http://localhost:8080/portal/callback",
-      issuer: "https://accounts.google.com"
-    },
+  // ====================================================================================
+  defaultAWS_kpc = JSON.stringify({
+    provider_name: "provider_name",
+    region: "region",
+    access_key_id: "access_key_id_default",
+    secret_access_key: "secret_access_key_default"
+  },
     null,
-    2 // <- pretty print with 2-space indentation
+    2
   );
 
-  async provisionRequest() {
+  async aws_kpc_Request() {
     this.requesting.set(true);
-    let res = await send_config(this.jsonInput);
-    this.configResponse = JSON.parse(res);
+    let res = await kms_config_request("aws", this.defaultAWS_kpc);
+    this.configResponse.aws = JSON.parse(res);
     setTimeout(() => {
       this.requesting.set(false);
     }, 300);
     if (this.configResponse) {
       this.signin.set(false);
     }
-  }
+  };
+  // ====================================================================================
+  defaultAzure_kpc = JSON.stringify({
+    vault_url: "vault_default_url",
+    tenant_id: "tenant1_id",
+    client_id: "client_id_default",
+    client_secret: "client_secret_default"
+  },
+    null,
+    2
+  );
 
-  signinRequest() {
-    this.signin.set(true);
-    let jsonRequest = JSON.parse(this.jsonInput);
-    let signURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${jsonRequest.client_id}&redirect_uri=${jsonRequest.redirect_uri}&response_type=code&scope=${jsonRequest.scope}`
-    console.log(signURL);
-    window.open(signURL, "_blank");
+  async azure_kpc_Request() {
+    this.requesting.set(true);
+    let res = await kms_config_request("azure", this.defaultAzure_kpc);
+    this.configResponse.azure = JSON.parse(res);
     setTimeout(() => {
+      this.requesting.set(false);
+    }, 300);
+    if (this.configResponse) {
       this.signin.set(false);
-    }, 20);
-  }
+    }
+  };
+  // ====================================================================================
+  defaultGoogle_kpc = JSON.stringify({
+    type: "service_account",
+    project_id: "project_id",
+    private_key_id: "private_key_id",
+    private_key: "private_key",
+    client_email: "client@yourdomain.iam.gserviceaccount.com",
+    client_id: "client_id",
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/client%40yourdomain.iam.gserviceaccount.com",
+    universe_domain: "googleapis.com"
+  },
+    null,
+    2
+  );
+  async google_kpc_Request() {
+    this.requesting.set(true);
+    let res = await kms_config_request("google", this.defaultGoogle_kpc);
+    this.configResponse.google = JSON.parse(res);
+    setTimeout(() => {
+      this.requesting.set(false);
+    }, 300);
+    if (this.configResponse) {
+      this.signin.set(false);
+    }
+  };
+
+  // jsonInput = JSON.stringify(
+  //   {
+  //     provider: "google",
+  //     scope: "openid email profile",
+  //     type: "oidc",
+  //     client_id: "181370640671-rb2l88739bspe0ifbnsq7inoniqu4mgu.apps.googleusercontent.com",
+  //     client_secret: "",
+  //     discovery_url: "https://accounts.google.com/.well-known/openid-configuration",
+  //     redirect_uri: "http://localhost:8080/portal/callback",
+  //     issuer: "https://accounts.google.com"
+  //   },
+  //   null,
+  //   2 // <- pretty print with 2-space indentation
+  // );
+
+  // async provisionRequest() {
+  //   this.requesting.set(true);
+  //   let res = await send_config(this.jsonInput);
+  //   this.configResponse = JSON.parse(res);
+  //   setTimeout(() => {
+  //     this.requesting.set(false);
+  //   }, 300);
+  //   if (this.configResponse) {
+  //     this.signin.set(false);
+  //   }
+  // }
+
+  // signinRequest() {
+  //   this.signin.set(true);
+  //   let jsonRequest = JSON.parse(this.jsonInput);
+  //   let signURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${jsonRequest.client_id}&redirect_uri=${jsonRequest.redirect_uri}&response_type=code&scope=${jsonRequest.scope}`
+  //   console.log(signURL);
+  //   window.open(signURL, "_blank");
+  //   setTimeout(() => {
+  //     this.signin.set(false);
+  //   }, 20);
+  // }
 
 }

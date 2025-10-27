@@ -43,14 +43,14 @@
   <div class="row">
     <!-- 1st column -->
     <div class="column">
-      <img src="assets/logo/google.svg" alt="Google Logo" class="fixed-size">
+      <img src="./assets/logo/google.svg" alt="Google Logo" class="fixed-size">
       <h3>Key Provider Configuration</h3>
-      <textarea [(ngModel)]="jsonInput" rows="20" cols="30"></textarea>
-      <button type="button" (click)="provisionRequest()" [disabled]="requesting()">Provision</button>
+      <textarea [(ngModel)]="defaultGoogle_kpc" rows="30" cols="180"></textarea>
+      <button type="button" (click)="google_kpc_Request()" [disabled]="requesting()">Create Provider Configuration  </button>
       @if (!requesting()){
-      @if (configResponse) {
+      @if (configResponse.google) {
       <div>
-        <pre>{{ configResponse.response }}</pre>
+        <pre>{{ configResponse.google.response }}</pre>
       </div>
       }
       }
@@ -58,14 +58,14 @@
 
     <!-- 2nd column -->
     <div class="column">
-      <img src="assets/logo/aws.svg" alt="AWS Logo" class="fixed-size">
+      <img src="./assets/logo/aws.svg" alt="AWS Logo" class="fixed-size">
       <h3>Key Provider Configuration</h3>
-      <textarea [(ngModel)]="jsonInput" rows="20" cols="30"></textarea>
-      <button type="button" (click)="provisionRequest()" [disabled]="requesting()">Provision</button>
+      <textarea [(ngModel)]="defaultAWS_kpc" rows="30" cols="180"></textarea>
+      <button type="button" (click)="aws_kpc_Request()" [disabled]="requesting()">Create Provider Configuration</button>
       @if (!requesting()){
-      @if (configResponse) {
+      @if (configResponse.aws) {
       <div>
-        <pre>{{ configResponse.response }}</pre>
+        <pre>{{ configResponse.aws.response }}</pre>
       </div>
       }
       }
@@ -73,14 +73,14 @@
 
     <!-- 3rd column -->
     <div class="column">
-      <img src="assets/logo/azure.svg" alt="Azure Logo" class="fixed-size">
+      <img src="./assets/logo/azure.svg" alt="Azure Logo" class="fixed-size">
       <h3>Key Provider Configuration</h3>
-      <textarea [(ngModel)]="jsonInput" rows="20" cols="30"></textarea>
-      <button type="button" (click)="provisionRequest()" [disabled]="requesting()">Provision</button>
+      <textarea [(ngModel)]="defaultAzure_kpc" rows="30" cols="180"></textarea>
+      <button type="button" (click)="azure_kpc_Request()" [disabled]="requesting()">Create Provider Configuration</button>
       @if (!requesting()){
-      @if (configResponse) {
+      @if (configResponse.azure) {
       <div>
-        <pre>{{ configResponse.response }}</pre>
+        <pre>{{ configResponse.azure.response }}</pre>
       </div>
       }
       }
