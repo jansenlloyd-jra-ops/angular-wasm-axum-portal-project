@@ -1,7 +1,7 @@
 use axum::{
     Json, Router,
     body::to_bytes,
-    extract::Request,
+    extract::{Path, Request},
     response::{Html, IntoResponse},
     routing::{get_service, post},
 };
@@ -28,14 +28,13 @@ pub async fn make_opaque(bytes: usize) -> String {
 
 #[tokio::main]
 async fn main() {
-    let static_files = ServeDir::new("assets/admin_portal");
-
     let app = Router::new()
         // .fallback_service(ServeDir::new("assets/admin_portal"));
-        .nest_service("/v1/kms/configuration", get_service(static_files))
-        .route("/portal/wrapped-key", post(wrap_req))
-        .route("/portal/config", post(config_handler))
-        .route("/portal/callback", post(print_raw))
+        .nest_service("/v1/portal", get_service(ServeDir::new("assets/admin_portal")))
+        .route("/v1/kms/configuration/{config}", post(configure_kpc))
+        // .route("/portal/wrapped-key", post(wrap_req))
+        // .route("/portal/config", post(config_handler))
+        // .route("/portal/callback", post(print_raw))
         .fallback(handler_404);
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 8080));
@@ -43,6 +42,16 @@ async fn main() {
     axum::serve(tokio::net::TcpListener::bind(addr).await.unwrap(), app)
         .await
         .unwrap();
+}
+
+async fn configure_kpc(Path(config): Path<String>, Json(body): Json<Value>) -> impl IntoResponse {
+    match config.as_str() {
+        "google" => println!("google: {:?}", body),
+        "aws" => println!("aws: {:?}", body),
+        "azure" => println!("azure: {:?}", body),
+        _ => println!("unknown configuration"),
+    };
+    Json(json!({"response": "KEY PROVIDER CONFIGURATION CREATED"}))
 }
 
 async fn handler_404() -> impl IntoResponse {
@@ -66,16 +75,16 @@ async fn config_handler(Json(value): Json<Value>) -> impl IntoResponse {
     Json(json!({"response": "CONFIGURATION UPLOADED"}))
 }
 
-pub async fn print_raw(req: Request) -> impl IntoResponse {
-    let (parts, body) = req.into_parts();
-    let bytes = to_bytes(body, usize::MAX).await.unwrap();
-    let body_str = String::from_utf8_lossy(&bytes);
+// pub async fn print_raw(req: Request) -> impl IntoResponse {
+//     let (parts, body) = req.into_parts();
+//     let bytes = to_bytes(body, usize::MAX).await.unwrap();
+//     let body_str = String::from_utf8_lossy(&bytes);
 
-    println!("--- REQUEST INFO ---");
-    println!("Method: {}", parts.method);
-    println!("URI: {}", parts.uri);
-    println!("Headers: {:#?}", parts.headers);
-    println!("Body:\n{}", body_str);
+//     println!("--- REQUEST INFO ---");
+//     println!("Method: {}", parts.method);
+//     println!("URI: {}", parts.uri);
+//     println!("Headers: {:#?}", parts.headers);
+//     println!("Body:\n{}", body_str);
 
-    "OK"
-}
+//     "OK"
+// }
