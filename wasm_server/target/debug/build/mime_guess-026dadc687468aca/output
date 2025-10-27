@@ -1,1 +1,1 @@
-cargo:rustc-env=MIME_TYPES_GENERATED_PATH=/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_server/target/debug/build/mime_guess-026dadc687468aca/out/mime_types_generated.rs
+cargo:rustc-env=MIME_TYPES_GENERATED_PATH=/home/seg-workstation-three/Documents/Workspace/angular/portal/Portal/wasm_server/target/debug/build/mime_guess-026dadc687468aca/out/mime_types_generated.rs
