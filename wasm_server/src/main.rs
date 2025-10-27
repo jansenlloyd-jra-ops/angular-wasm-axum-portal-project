@@ -13,6 +13,7 @@ use serde_json::{Value, json};
 use sha3::{Digest, Sha3_256};
 use std::net::SocketAddr;
 use tower_http::services::ServeDir;
+use uuid::Uuid;
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct WrapResp {
@@ -51,7 +52,8 @@ async fn configure_kpc(Path(config): Path<String>, Json(body): Json<Value>) -> i
         "azure" => println!("azure: {:?}", body),
         _ => println!("unknown configuration"),
     };
-    Json(json!({"response": "KEY PROVIDER CONFIGURATION CREATED"}))
+    // add how to response key provider id
+    Json(json!({"response": "KEY PROVIDER CONFIGURATION CREATED", "key_provider_id": Uuid::new_v4().to_string()}))
 }
 
 async fn handler_404() -> impl IntoResponse {
