@@ -1,0 +1,127 @@
+:host {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  display: flex;
+  flex-flow: column;
+  gap: 1em;
+}
+
+//   input {
+//     width: 10em;
+//     padding: 0.75em;
+//   }
+
+//   button {
+//     padding: 0.5em;
+//     width: 11.75em;
+//   }
+// }
+
+// // .drop-zone {
+// //   border: 2px dashed #ccc;
+// //   padding: 20px;
+// //   text-align: center;
+// //   cursor: pointer;
+// //   margin-bottom: 20px;
+// // }
+
+// // .drop-zone.drag-over {
+// //   background-color: #f0f0f0;
+// // }
+
+// .row {
+//   display: flex;
+//   gap: 20px; /* space between columns */
+//   justify-content: space-between;
+// }
+
+// .column {
+//   flex: 1; /* make all columns equal width */
+//   display: flex;
+//   flex-direction: column;
+//   gap: 10px;
+// }
+
+// .fixed-size {
+//   width: 100px;
+//   height: 100px;
+//   object-fit: contain; /* keeps aspect ratio */
+// }
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #fafafa;
+}
+
+.row {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.column {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  width: 480px;
+  text-align: center;
+  margin: 5px 5px 5px 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.fixed-size {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+
+/* Center textarea */
+textarea {
+  display: block;
+  align-items: center;
+  width: 100%;
+  /* slightly smaller than column width */
+  resize: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  font-family: monospace;
+  background: #f9f9f9;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+pre {
+  text-align: left;
+  background: #f4f4f4;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+  font-size: 14px;
+  color: forestgreen;
+  width: 90%;
+  margin: 0 auto;
+}

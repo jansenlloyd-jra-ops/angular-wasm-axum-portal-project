@@ -1,0 +1,89 @@
+<!-- <input max="22" min="1" type="text" placeholder="Input a key" #key />
+<button type="button" (click)="request_wrap_key(key.value)" [disabled]="requesting()">
+  Request wrap key
+</button>
+@if (!requesting()){
+@if(serverResponse){
+<div>Message id: {{ serverResponse?.msg_id }}</div>
+<div>Wrapped key: {{ serverResponse?.wrapped_key }}</div>
+<div>calculated in {{ serveTimeResp() }}</div>
+}
+} -->
+
+<!-- <div (dragover)="onDragOver($event)" (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
+  style="border: 2px dashed gray; padding: 20px; text-align: center;">
+  <p>Drag & drop a file here, or select one below</p>
+
+  <label style="cursor: pointer; color: white; background: #007bff; padding: 8px 16px; border-radius: 4px;">
+    Choose File
+    <input #fileInput type="file" (change)="onFileSelected($event)" style="display: none;" />
+  </label>
+</div>
+
+@if (file) {
+<div style="margin-top: 15px;">
+  <p><strong>Selected file:</strong> {{ file.name }}</p>
+  <button type="button" (click)="uploadFile()" [disabled]="requesting()">Upload</button>
+  <button type="button" (click)="clearFile()">Replace File</button>
+</div>
+} -->
+
+
+<!-- <div>Provision Configuration</div>
+<textarea [(ngModel)]="jsonInput" rows="10" cols="100"></textarea>
+<button type="button" (click)="provisionRequest()" [disabled]="requesting()">provision</button>
+@if (!requesting()){
+@if (configResponse) {<div>
+  <button type="button" (click)="signinRequest()" [disabled]="signin()">Sign-in</button>
+  <pre style="background: #f4f4f4; padding: 10px;">{{ configResponse.response }}</pre>
+</div>}
+} -->
+
+<div class="container">
+  <div class="row">
+    <!-- 1st column -->
+    <div class="column">
+      <img src="./assets/logo/google.svg" alt="Google Logo" class="fixed-size">
+      <h3>Key Provider Configuration</h3>
+      <textarea [(ngModel)]="defaultGoogle_kpc" rows="30" cols="180"></textarea>
+      <button type="button" (click)="google_kpc_Request()" [disabled]="requesting()">Create Provider Configuration  </button>
+      @if (!requesting()){
+      @if (configResponse.google) {
+      <div>
+        <pre>{{ configResponse.google.response }}</pre>
+      </div>
+      }
+      }
+    </div>
+
+    <!-- 2nd column -->
+    <div class="column">
+      <img src="./assets/logo/aws.svg" alt="AWS Logo" class="fixed-size">
+      <h3>Key Provider Configuration</h3>
+      <textarea [(ngModel)]="defaultAWS_kpc" rows="30" cols="180"></textarea>
+      <button type="button" (click)="aws_kpc_Request()" [disabled]="requesting()">Create Provider Configuration</button>
+      @if (!requesting()){
+      @if (configResponse.aws) {
+      <div>
+        <pre>{{ configResponse.aws.response }}</pre>
+      </div>
+      }
+      }
+    </div>
+
+    <!-- 3rd column -->
+    <div class="column">
+      <img src="./assets/logo/azure.svg" alt="Azure Logo" class="fixed-size">
+      <h3>Key Provider Configuration</h3>
+      <textarea [(ngModel)]="defaultAzure_kpc" rows="30" cols="180"></textarea>
+      <button type="button" (click)="azure_kpc_Request()" [disabled]="requesting()">Create Provider Configuration</button>
+      @if (!requesting()){
+      @if (configResponse.azure) {
+      <div>
+        <pre>{{ configResponse.azure.response }}</pre>
+      </div>
+      }
+      }
+    </div>
+  </div>
+</div>

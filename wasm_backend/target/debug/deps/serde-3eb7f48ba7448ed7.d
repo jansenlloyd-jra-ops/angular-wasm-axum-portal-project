@@ -1,0 +1,12 @@
+/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/deps/serde-3eb7f48ba7448ed7.d: /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/build/serde-68117967c4be6c9b/out/private.rs
+
+/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/deps/libserde-3eb7f48ba7448ed7.rmeta: /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs /home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs /home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/build/serde-68117967c4be6c9b/out/private.rs
+
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/lib.rs:
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/integer128.rs:
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/mod.rs:
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/de.rs:
+/home/seg-workstation-three/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde-1.0.228/src/private/ser.rs:
+/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/build/serde-68117967c4be6c9b/out/private.rs:
+
+# env-dep:OUT_DIR=/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/debug/build/serde-68117967c4be6c9b/out
