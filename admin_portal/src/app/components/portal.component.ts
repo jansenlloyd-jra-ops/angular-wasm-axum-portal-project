@@ -30,7 +30,7 @@ export class PortalComponent implements OnInit {
   configResponse: any = { google: {}, aws: {}, azure: {} };
   requesting = signal<boolean>(false);
   copiedPrompt = signal<string>('');
-    defaultAWS_kpc = JSON.stringify({
+  defaultAWS_kpc = JSON.stringify({
     provider_name: "provider_name",
     region: "region",
     access_key_id: "access_key_id_default",
@@ -100,14 +100,16 @@ export class PortalComponent implements OnInit {
   };
 
   copyToClipboard(text: string) {
-  navigator.clipboard.writeText(text).then(() => {
-    console.log('Copied to clipboard!');
-    this.copiedPrompt.set("Key Provider ID Copied!");
-    // Optionally show feedback (toast, alert, or temporary message)
-  }).catch(err => {
-    console.error('Failed to copy: ', err);
-  });
-}
+    navigator.clipboard.writeText(text).then(() => {
+      console.log('Copied to clipboard!');
+      this.copiedPrompt.set("Key Provider ID Copied!");
+      setTimeout(() => {
+        this.copiedPrompt.set(''); 
+      }, 5000);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
+  }
   // ====================================================================================
 
   provisionConfig = JSON.stringify(
@@ -122,7 +124,7 @@ export class PortalComponent implements OnInit {
       issuer: "https://accounts.google.com"
     },
     null,
-    2 
+    2
   );
 
 

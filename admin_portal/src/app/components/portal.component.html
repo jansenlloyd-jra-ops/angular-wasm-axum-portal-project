@@ -68,12 +68,9 @@
     }
 
     @if (selectedProvider && !requesting() && configResponse[selectedProvider]) {
-    <div style="background: #f4f4f4;">
+    <div class="response-container" [class.active]="!requesting() && configResponse[selectedProvider]">
       <pre style="color: forestgreen;">{{ configResponse[selectedProvider].response }}</pre>
-      <div class="response">
-        <button type="button" (click)="copyToClipboard(configResponse[selectedProvider].key_provider_id)">📋</button>
-        <p>{{configResponse[selectedProvider].key_provider_id}}</p>
-      </div>
+      <button type="button" (click)="copyToClipboard(configResponse[selectedProvider].key_provider_id)">📋 {{configResponse[selectedProvider].key_provider_id}}</button>
       @if (copiedPrompt() != '') {
       <small style="color: green;">{{copiedPrompt()}}</small>
       }
