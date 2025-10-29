@@ -2,3 +2,31 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.no-default-dialog .mat-mdc-dialog-container {
+  padding: 0; 
+}
+
+.no-default-dialog .mat-mdc-dialog-surface {
+  max-width: none !important; 
+  width: auto !important;      
+  height: auto !important;     
+  display: inline-block;       
+  background: transparent;     
+  box-shadow: none;            
+  overflow: hidden;
+  max-height: none;
+}
+
+.sidenav {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0px;
+  background: #007681;
+}
+

@@ -43,41 +43,32 @@
 </div> -->
 
 
-<div class="center-container">
-  <div class="center-column">
-    <h3>Key Provider Configuration</h3>
-    <div class="button-group">
-      <button type="button" (click)="toggleProvider('Google')" [class.active]="selectedProvider == 'google'">
-        <img src="./assets/logo/google.svg" alt="Google Logo" class="button-icon-fixed-size">
-      </button>
-      <button type="button" (click)="toggleProvider('AWS')" [class.active]="selectedProvider == 'aws'">
-        <img src="./assets/logo/aws.svg" alt="AWS Logo" class="button-icon-fixed-size">
-      </button>
-      <button type="button" (click)="toggleProvider('Azure')" [class.active]="selectedProvider == 'azure'">
-        <img src="./assets/logo/azure.svg" alt="Azure Logo" class="button-icon-fixed-size">
-      </button>
-    </div>
-    <textarea [(ngModel)]="selectedProviderConfig" rows="30" cols="180"></textarea>
-    <button type="button" (click)="kpc_request()" [disabled]="!selectedProvider || requesting()">Create Provider
-      Configuration
-    </button>
-    @if (selectedProvider && requesting()) {
-    <div>
-      <pre style="color: black;">Submitting {{ selectedProvider }} configuration...</pre>
-    </div>
-    }
+<mat-sidenav-container>
+  <mat-sidenav class="sidenav" mode="side" opened>
+    <mat-toolbar style="background-image: linear-gradient(to right, #1b6369, #018894); color: rgb(235, 235, 235);">
+      <h3>Admin Portal</h3>
+    </mat-toolbar>
+    <mat-list>
+      <mat-divider></mat-divider>
+      <mat-list-item class="sidenav-container">
+        <div>
+          <button matButton="elevated" class="sidenav-button" (click)="openKPC()">Create Key Provider Config</button>
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="main-container">
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title> This is the expansion title </mat-panel-title>
+        <mat-panel-description> This is a summary of the content </mat-panel-description>
+      </mat-expansion-panel-header>
+      
+    </mat-expansion-panel>
+  </mat-sidenav-content>
+</mat-sidenav-container>
 
-    @if (selectedProvider && !requesting() && configResponse[selectedProvider]) {
-    <div class="response-container" [class.active]="!requesting() && configResponse[selectedProvider]">
-      <pre style="color: forestgreen;">{{ configResponse[selectedProvider].response }}</pre>
-      <button type="button" (click)="copyToClipboard(configResponse[selectedProvider].key_provider_id)">📋 {{configResponse[selectedProvider].key_provider_id}}</button>
-      @if (copiedPrompt() != '') {
-      <small style="color: green;">{{copiedPrompt()}}</small>
-      }
-    </div>
-    }
-  </div>
-</div>
+
 
 
 

@@ -1,0 +1,67 @@
+:host {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #333;
+  display: flex;
+  flex-flow: column;
+  gap: 1em;
+}
+
+//  ===========================================================================
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: left;
+  height: 100vh;
+  width: auto;
+  background: gray;
+}
+
+.sidenav-button{
+  border-radius: 2px;
+}
+
+.sidenav {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-radius: 0px;
+  gap: 20px;
+  background: #018894;
+  background-image: linear-gradient(to top, #027e8a, #018894);
+}
+// 007681
+.sidenav-container{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  height: auto;
+  width: auto;
+  gap: 20px;
+  margin: 10px 10px 10px 10px;
+  background: transparent;
+}
+
+.kpc-dialog {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px 20px 20px 20px;
+  text-align: center;
+  height: 82vh;
+  width: 40vw;
+  margin: 5px 5px 5px 5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+// ===========================================================================
+
+/* Center textarea */

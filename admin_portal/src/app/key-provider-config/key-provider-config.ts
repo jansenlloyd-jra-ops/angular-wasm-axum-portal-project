@@ -1,26 +1,19 @@
 import { ChangeDetectionStrategy, Component, type OnInit, signal } from '@angular/core';
 import { send_config, kms_config_request } from '../../assets/wasm_backend/wasm_backend.js';
 import { FormsModule } from '@angular/forms';
-import init from '../../assets/wasm_backend/wasm_backend.js';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
-  selector: 'portal-demo',
+  selector: 'kpc',
   standalone: true,
-  imports: [FormsModule],
-  templateUrl: './portal.component.html',
-  styleUrl: './portal.component.scss',
+  imports: [FormsModule, MatButtonModule],
+  templateUrl: './key-provider-config.html',
+  styleUrl: './key-provider-config.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class PortalComponent implements OnInit {
-  ngOnInit() {
-    if (typeof window !== 'undefined') {
-      // ✅ only initialize wasm in browser, not during SSR
-      init();
-    }
-  }
-
+export class KeyProviderConfigComponent {
   serveTime = signal<string>('');
   serverResponse: any = {};
   serveTimeResp = signal<string>('');
@@ -104,7 +97,7 @@ export class PortalComponent implements OnInit {
       console.log('Copied to clipboard!');
       this.copiedPrompt.set("Key Provider ID Copied!");
       setTimeout(() => {
-        this.copiedPrompt.set(''); 
+        this.copiedPrompt.set('');
       }, 5000);
     }).catch(err => {
       console.error('Failed to copy: ', err);

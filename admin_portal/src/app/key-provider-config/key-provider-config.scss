@@ -1,23 +1,4 @@
-:host {
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  color: #333;
-  display: flex;
-  flex-flow: column;
-  gap: 1em;
-}
-
-//  ===========================================================================
-.center-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background: #fafafa;
-}
-
+// 007681
 .center-column {
   background: white;
   border: 1px solid #ddd;
@@ -37,19 +18,29 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 0px;
+  width: 36vw;
+  border-color: gray;
+  border-radius: 2px;
   overflow: hidden;
+  padding: 10px 0;
   flex: wrap;
-  float: center;
 }
 
 .button-group button {
+  flex: 1;
   background-color: #f4f4f4;
-  color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   padding: 10px 20px;
+  border-radius: 2px;
   border: none;
+  width: 33%;
   cursor: pointer;
   font-size: 16px;
+}
+
+.button-group button.active {
+  background: #90cfcc !important;         
+  // border-bottom: 3px solid #007681 !important; 
 }
 
 .button-group button:not(:last-child) {
@@ -57,25 +48,22 @@
 }
 
 .button-group button:hover {
-  background-color: #359e90;
+  background-color: #007681;
 }
 
 .button-icon-fixed-size {
   width: 60px;
   height: 60px;
   object-fit: contain;
+  padding: 10px 10px 10px 10px;
 }
 
 .button-group button.active {
-  background-color: #46d1bf;
+  background-color: #00a4b3;
   color: white;
   transition: 0.2s ease;
 }
 
-
-// ===========================================================================
-
-/* Center textarea */
 textarea {
   display: flex;
   justify-content: center;
@@ -92,7 +80,7 @@ textarea {
 }
 
 button {
-  background-color: #3eb8b8;
+  background-color: #00a4b3;
   color: white;
   border: none;
   border-radius: 2px;
@@ -139,8 +127,7 @@ pre {
   resize: none;
   overflow: hidden;
 
-  /* Animation setup */
-  transition: 
+  transition:
     max-height 0.4s ease,
     opacity 0.3s ease,
     transform 0.3s ease;
@@ -150,9 +137,8 @@ pre {
   transform: scaleY(0);
 }
 
-/* When visible */
 .response-container.active {
-  max-height: 420px; /* enough space for your content */
+  max-height: 420px;
   opacity: 1;
   transform: scaleY(1);
 }
@@ -162,6 +148,7 @@ small {
   transition: opacity 0.3s ease-in-out;
 }
 
-small.ng-trigger, small:not(:empty) {
+small.ng-trigger,
+small:not(:empty) {
   opacity: 1;
 }
