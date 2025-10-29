@@ -52,19 +52,41 @@
       <mat-divider></mat-divider>
       <mat-list-item class="sidenav-container">
         <div>
+          <button matButton="elevated" class="sidenav-button" (click)="toggleAllPanels()">{{ allExpanded ? 'Collapse All' : 'Expand All' }}</button>
+        </div>
+      </mat-list-item>
+      <mat-list-item class="sidenav-container">
+        <div>
           <button matButton="elevated" class="sidenav-button" (click)="openKPC()">Create Key Provider Config</button>
         </div>
       </mat-list-item>
     </mat-list>
   </mat-sidenav>
+
   <mat-sidenav-content class="main-container">
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title> This is the expansion title </mat-panel-title>
-        <mat-panel-description> This is a summary of the content </mat-panel-description>
-      </mat-expansion-panel-header>
-      
-    </mat-expansion-panel>
+    <mat-accordion multi>
+
+      <mat-expansion-panel #user_panel expanded class="user-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Users </mat-panel-title>
+          <mat-panel-description>
+            Allowed Users for Client Side Encryption
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <user-table></user-table>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel #logs_panel expanded class="logs-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title> Logs </mat-panel-title>
+          <mat-panel-description>
+            Audit Logs
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <logs-table></logs-table>
+      </mat-expansion-panel>
+
+    </mat-accordion>
   </mat-sidenav-content>
 </mat-sidenav-container>
 

@@ -2,6 +2,7 @@
   font-family: 'Roboto', sans-serif;
   font-size: 14px;
   font-weight: 400;
+  height: 100vh !important;
   color: #333;
   display: flex;
   flex-flow: column;
@@ -15,10 +16,25 @@
   align-items: left;
   height: 100vh;
   width: auto;
+  gap: 10px;
+  padding: 10px 10px 10px 10px;
   background: gray;
+
 }
 
-.sidenav-button{
+.user-panel {
+  height: auto;
+  width: 75vw;
+  border-radius: 2px o !important;
+}
+
+.logs-panel {
+  height: auto;
+  width: 75vw;
+  border-radius: 2px o !important;
+}
+
+.sidenav-button {
   border-radius: 2px;
 }
 
@@ -36,8 +52,9 @@
   background: #018894;
   background-image: linear-gradient(to top, #027e8a, #018894);
 }
+
 // 007681
-.sidenav-container{
+.sidenav-container {
   display: flex;
   justify-content: left;
   align-items: center;
@@ -62,6 +79,7 @@
   flex-direction: column;
   align-items: center;
 }
+
 // ===========================================================================
 
 /* Center textarea */

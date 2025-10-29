@@ -17,16 +17,3 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   max-height: none;
 }
 
-.sidenav {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  border-radius: 0px;
-  background: #007681;
-}
-

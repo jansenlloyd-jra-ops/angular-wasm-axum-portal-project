@@ -5,27 +5,22 @@
   table {
     height: 20vh;
     width: 100%;
-    table-layout: fixed;
+    table-layout: fixed; 
   }
 
-  th,
-  td {
+  th, td {
     text-align: left;
     padding: 8px 12px;
-    white-space: nowrap;
+    white-space: nowrap;    
     overflow: hidden;
-    text-overflow: ellipsis;
+    text-overflow: ellipsis; 
   }
 
-  .col-name {
+  .col-time {
     width: 20%;
   }
 
-  .col-email {
-    width: 40%;
-  }
-
-  .col-kpc {
+  .col-message {
     width: 40%;
   }
 
