@@ -1,0 +1,18 @@
+<div class="column">
+  <div>Admin Provision</div>
+  <mat-form-field appearance="outline" class="json-textarea">
+    <mat-label>Provision Configuration</mat-label>
+    <textarea matInput [(ngModel)]="provisionConfig" rows="30" spellcheck="false"></textarea>
+  </mat-form-field>
+  <div class="row">
+    <button matButton="elevated" class="button" type="button" (click)="provisionRequest()"
+      [disabled]="requesting()">provision</button>
+    @if (!requesting()){
+    <button matButton="elevated" class="button" type="button" (click)="signinRequest()"
+      [disabled]="signin()">sign-in</button>
+    }
+  </div>
+  @if (configResponse.response != '') {
+  <pre style="background: #f4f4f4; padding: 10px;">{{ configResponse.response }}</pre>
+  }
+</div>

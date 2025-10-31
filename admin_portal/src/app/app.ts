@@ -1,12 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { PortalComponent } from './portal/portal.component';
+import { PortalComponent } from './components/portal/portal.component';
+import { SiginInComponent } from './components/sigin-in/sigin-in.component';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, PortalComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('admin_portal');
+  protected readonly title = signal('Admin Portal');
 }

@@ -1,15 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
-export function wrapped_key_request(key: string): Promise<any>;
-export function send_config(config: string): Promise<any>;
+export function provision_config_request(config: string): Promise<any>;
 export function kms_config_request(name: string, config: string): Promise<any>;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly wrapped_key_request: (a: number, b: number) => any;
-  readonly send_config: (a: number, b: number) => any;
+  readonly provision_config_request: (a: number, b: number) => any;
   readonly kms_config_request: (a: number, b: number, c: number, d: number) => any;
   readonly __wbindgen_exn_store: (a: number) => void;
   readonly __externref_table_alloc: () => number;
@@ -17,8 +15,8 @@ export interface InitOutput {
   readonly __wbindgen_malloc: (a: number, b: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number, d: number) => number;
   readonly __wbindgen_export_5: WebAssembly.Table;
-  readonly closure100_externref_shim: (a: number, b: number, c: any) => void;
-  readonly closure121_externref_shim: (a: number, b: number, c: any, d: any) => void;
+  readonly closure97_externref_shim: (a: number, b: number, c: any) => void;
+  readonly closure118_externref_shim: (a: number, b: number, c: any, d: any) => void;
   readonly __wbindgen_start: () => void;
 }
 

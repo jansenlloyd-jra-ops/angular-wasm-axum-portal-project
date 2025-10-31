@@ -1,1 +1,1 @@
-/home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/target/wasm32-unknown-unknown/release/wasm_backend.wasm: /home/seg-workstation-three/Documents/Workspace/angular/portal/portal_project/wasm_backend/src/lib.rs
+/home/seg-workstation-three/Documents/Workspace/angular/portal/Portal/wasm_backend/target/wasm32-unknown-unknown/release/wasm_backend.wasm: /home/seg-workstation-three/Documents/Workspace/angular/portal/Portal/wasm_backend/src/lib.rs

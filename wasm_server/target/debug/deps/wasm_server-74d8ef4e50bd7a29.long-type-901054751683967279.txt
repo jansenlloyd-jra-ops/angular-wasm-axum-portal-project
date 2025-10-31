@@ -1,2 +1,0 @@
-fn(axum::extract::Path<std::string::String>, Json<Value>) -> impl Future<Output = impl Into<{type error}>> {configure_kpc}
-fn(axum::extract::Path<std::string::String>, Json<Value>) -> impl Future<Output = impl Into<{type error}>> {configure_kpc}: Handler<_, _>
