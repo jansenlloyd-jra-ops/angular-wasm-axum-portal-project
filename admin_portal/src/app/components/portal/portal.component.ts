@@ -10,6 +10,7 @@ import { MatDivider } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
+import { ProvidersPanelComponent } from '../panels/providers-panel/providers-panel.js';
 
 @Component({
   selector: 'portal-demo',
@@ -22,6 +23,7 @@ import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansi
     MatToolbarModule,
     MatExpansionModule,
     UserPanelComponent,
+    ProvidersPanelComponent
     // LogsPanelComponent
   ],
   templateUrl: './portal.component.html',
@@ -67,8 +69,8 @@ export class PortalComponent implements OnInit, AfterViewInit {
     this.allExpanded = shouldExpand;
   }
 
-  async fetchAllKPC() {
-    let configs = await kpc_fetch_all();
-    console.log(configs);
-  }
+  // async fetchAllKPC() {
+  //   let configs = await kpc_fetch_all();
+  //   console.log(configs);
+  // }
 }

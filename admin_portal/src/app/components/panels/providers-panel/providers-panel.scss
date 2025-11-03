@@ -1,0 +1,46 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+
+  table {
+    height: 20vh;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  th,
+  td {
+    font-size: 14px;
+    text-align: left;
+    padding: 8px 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .col-kpc_id {
+    width: 20%;
+  }
+
+  .col-name {
+    width: 20%;
+  }
+
+  .col-provider {
+    width: 10%;
+  }
+
+  .col-config {
+    width: 40%;
+  }
+
+  mat-paginator {
+    margin-top: 10px;
+  }
+}

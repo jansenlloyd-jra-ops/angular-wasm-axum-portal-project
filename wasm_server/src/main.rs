@@ -1,5 +1,9 @@
 use axum::{
-    Json, Router, extract::Path, http::request, response::{Html, IntoResponse}, routing::{get_service, post}
+    Json, Router,
+    extract::Path,
+    http::request,
+    response::{Html, IntoResponse},
+    routing::{get_service, post},
 };
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
 use rand::RngCore;
@@ -8,8 +12,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 // use sha3::{Digest, Sha3_256};
 use lazy_static::lazy_static; // or once_cell::sync::OnceCell
-use std::{net::SocketAddr, vec};
 use std::sync::Mutex;
+use std::{net::SocketAddr, vec};
 use tower_http::{
     cors::{Any, CorsLayer},
     services::ServeDir,
@@ -29,9 +33,60 @@ pub struct ProviderRequest {
     name: String,
     configuration: Value,
 }
-
 lazy_static! {
-    static ref PROVIDER_VECTOR: Mutex<Vec<Providers>> = Mutex::new(Vec::new());
+    pub static ref PROVIDER_VECTOR: Mutex<Vec<Providers>> = Mutex::new(vec![
+        Providers {
+            name: "test_department1".to_string(),
+            provider: "google".to_string(),
+            kpc_id: "c3a59b16-1f6e-4c12-9f0d-5b74b1f146ae".to_string(),
+            configuration: r#"{
+                "type": "service_account",
+                "project_id": "project_id",
+                "private_key_id": "private_key_id",
+                "private_key": "private_key",
+                "client_email": "client@yourdomain.iam.gserviceaccount.com",
+                "client_id": "client_id",
+                "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+                "token_uri": "https://oauth2.googleapis.com/token",
+                "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+                "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/client%40yourdomain.iam.gserviceaccount.com",
+                "universe_domain": "googleapis.com"
+            }"#.to_string(),
+        },
+        Providers {
+            name: "test_department2".to_string(),
+            provider: "aws".to_string(),
+            kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string(),
+            configuration: r#"{
+                "provider_name": "provider_name",
+                "region": "region",
+                "access_key_id": "access_key_id_default",
+                "secret_access_key": "secret_access_key_default"
+            }"#.to_string(),
+        },
+        Providers {
+            name: "test_department3".to_string(),
+            provider: "aws".to_string(),
+            kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string(),
+            configuration: r#"{
+                "provider_name": "provider_name",
+                "region": "region",
+                "access_key_id": "access_key_id_default",
+                "secret_access_key": "secret_access_key_default"
+            }"#.to_string(),
+        },
+        Providers {
+            name: "test_department4".to_string(),
+            provider: "azure".to_string(),
+            kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string(),
+            configuration: r#"{
+                "vault_url": "vault_default_url",
+                "tenant_id": "tenant1_id",
+                "client_id": "client_id_default",
+                "client_secret": "client_secret_default"
+            }"#.to_string(),
+        }
+    ]);
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
@@ -72,18 +127,22 @@ async fn main() {
         .unwrap();
 }
 
+async fn config_handler(Json(value): Json<Value>) -> impl IntoResponse {
+    println!("{:?}", value);
+    Json(json!({"response": "CONFIGURATION UPLOADED"}))
+}
+
 async fn configure_kpc(
     Path(provider): Path<String>,
     Json(request): Json<ProviderRequest>,
 ) -> impl IntoResponse {
     println!("{:?}", request);
     // let request: ProviderRequest = serde_json::from_value(body).unwrap();
-    let kpc_id_generated = Uuid::new_v4().to_string();
     let config = request.configuration.to_string();
     match provider.as_str() {
-        "google" => provider_record("google", request.name, kpc_id_generated, config).await,
-        "aws" => provider_record("aws", request.name, kpc_id_generated, config).await,
-        "azure" => provider_record("azure", request.name, kpc_id_generated, config).await,
+        "google" => provider_record("google", request.name, config).await,
+        "aws" => provider_record("aws", request.name, config).await,
+        "azure" => provider_record("azure", request.name, config).await,
         _ => println!("unknown configuration"),
     };
     // add how to response key provider id
@@ -96,8 +155,11 @@ async fn configure_kpc(
 async fn handler_404() -> impl IntoResponse {
     Html("<h1>404 - Not Found</h1>")
 }
-
-async fn provider_record(provider: &str, name: String, kpc_id: String, config: String) {
+// Used lazy static since there is no sql logic/query here that I implemented.
+// it can be changed into sql query later on that fetches a table or any data required
+// but for testing purposes the said crate is used.
+async fn provider_record(provider: &str, name: String, config: String) {
+    let kpc_id = Uuid::new_v4().to_string();
     println!("{} {}:  {}", provider, name, config);
     let mut vec_guard = PROVIDER_VECTOR.lock().unwrap();
     let record = Providers {
@@ -110,26 +172,9 @@ async fn provider_record(provider: &str, name: String, kpc_id: String, config: S
     drop(vec_guard);
 }
 
-async fn return_kpcs() -> impl IntoResponse{
+async fn return_kpcs() -> impl IntoResponse {
     let mut vec_guard = PROVIDER_VECTOR.lock().unwrap();
     Json(json!(*vec_guard))
-}
-
-// async fn wrap_req(Json(value): Json<Value>) -> impl IntoResponse {
-//     println!("{:?}", value);
-//     let req_value = value.get("key").unwrap().as_str().unwrap();
-//     let mut hasher = Sha3_256::new();
-//     hasher.update(req_value);
-//     let res = WrapResp {
-//         wrapped_key: URL_SAFE_NO_PAD.encode(hasher.finalize()),
-//         msg_id: Some(make_opaque(32).await),
-//     };
-//     Json(res)
-// }
-
-async fn config_handler(Json(value): Json<Value>) -> impl IntoResponse {
-    println!("{:?}", value);
-    Json(json!({"response": "CONFIGURATION UPLOADED"}))
 }
 
 // pub async fn print_raw(req: Request) -> impl IntoResponse {
