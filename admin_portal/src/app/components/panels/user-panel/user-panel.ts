@@ -8,7 +8,7 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
 export interface UserTableStruct {
   name: string,
   email: string,
-  kpc_id: string,
+  ez_id: string,
 }
 
 @Component({
@@ -18,7 +18,7 @@ export interface UserTableStruct {
   styleUrl: './user-panel.scss'
 })
 export class UserPanelComponent {
-  displayedColumns: string[] = ['name', 'email', 'kpc_id'];
+  displayedColumns: string[] = ['name', 'email', 'ez_id'];
   dataSource_User = new MatTableDataSource<UserTableStruct>([]);
   loading = false;
 

@@ -32,6 +32,14 @@ pub struct Providers {
 pub struct Users{
     name: String,
     email: String,
+    ez_id: String,
+}
+
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct EncryptionZone{
+    zone_name: String,
+    ez_id: String,
     kpc_id: String,
 }
 
@@ -43,7 +51,7 @@ pub struct ProviderRequest {
 lazy_static! {
     pub static ref PROVIDER_VECTOR: Mutex<Vec<Providers>> = Mutex::new(vec![
         Providers {
-            name: "test_department1".to_string(),
+            name: "test_department1_key".to_string(),
             provider: "google".to_string(),
             kpc_id: "c3a59b16-1f6e-4c12-9f0d-5b74b1f146ae".to_string(),
             configuration: r#"{
@@ -61,7 +69,7 @@ lazy_static! {
             }"#.to_string(),
         },
         Providers {
-            name: "test_department2".to_string(),
+            name: "test_department2_key".to_string(),
             provider: "aws".to_string(),
             kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string(),
             configuration: r#"{
@@ -72,7 +80,7 @@ lazy_static! {
             }"#.to_string(),
         },
         Providers {
-            name: "test_department3".to_string(),
+            name: "test_department3_key".to_string(),
             provider: "aws".to_string(),
             kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string(),
             configuration: r#"{
@@ -83,7 +91,7 @@ lazy_static! {
             }"#.to_string(),
         },
         Providers {
-            name: "test_department4".to_string(),
+            name: "test_department4_key".to_string(),
             provider: "azure".to_string(),
             kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string(),
             configuration: r#"{
@@ -96,16 +104,38 @@ lazy_static! {
     ]);
 
     pub static ref USER_VECTOR: Mutex<Vec<Users>> = Mutex::new(vec![  
-        Users { name: "Alice Johnson".to_string(), email: "alice.johnson@example.com".to_string(), kpc_id: "c3a59b16-1f6e-4c12-9f0d-5b74b1f146ae".to_string()},
-        Users { name: "Brian Kim".to_string(), email: "brian.kim@example.com".to_string(), kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string()},
-        Users { name: "Carla Mendoza".to_string(), email: "carla.mendoza@example.com".to_string(), kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string()},
-        Users { name: "David Smith".to_string(), email: "david.smith@example.com".to_string(), kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string()},
-        Users { name: "Alice Johnson".to_string(), email: "alice@example.com".to_string(), kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string()},
-        Users { name: "Bob Smith".to_string(), email: "bob@example.com".to_string(), kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string()},
-        Users { name: "Carol White".to_string(), email: "carol@example.com".to_string(), kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string()},
-        Users { name: "David Brown".to_string(), email: "david@example.com".to_string(), kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string()},
-        Users { name: "Eve Green".to_string(), email: "eve@example.com".to_string(), kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string()},
-        Users { name: "Frank Blue".to_string(), email: "frank@example.com".to_string(), kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string()}
+        Users { name: "Alice Johnson".to_string(), email: "alice.johnson@example.com".to_string(), ez_id: "0c3b6e42-2c41-4b7d-9a9b-4a3c583f97c1".to_string()},
+        Users { name: "Brian Kim".to_string(), email: "brian.kim@example.com".to_string(), ez_id: "0c3b6e42-2c41-4b7d-9a9b-4a3c583f97c1".to_string()},
+        Users { name: "Carla Mendoza".to_string(), email: "carla.mendoza@example.com".to_string(), ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string()},
+        Users { name: "David Smith".to_string(), email: "david.smith@example.com".to_string(), ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string()},
+        Users { name: "Alice Johnson".to_string(), email: "alice@example.com".to_string(), ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string()},
+        Users { name: "Bob Smith".to_string(), email: "bob@example.com".to_string(), ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string()},
+        Users { name: "Carol White".to_string(), email: "carol@example.com".to_string(), ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string()},
+        Users { name: "David Brown".to_string(), email: "david@example.com".to_string(), ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string()},
+        Users { name: "Eve Green".to_string(), email: "eve@example.com".to_string(), ez_id: "0c3b6e42-2c41-4b7d-9a9b-4a3c583f97c1".to_string()},
+        Users { name: "Frank Blue".to_string(), email: "frank@example.com".to_string(), ez_id: "0c3b6e42-2c41-4b7d-9a9b-4a3c583f97c1".to_string()}
+    ]);
+    pub static ref EZ_VECTOR: Mutex<Vec<EncryptionZone>> = Mutex::new(vec![  
+    EncryptionZone {
+        zone_name: "test_department1".to_string(),
+        ez_id: "0c3b6e42-2c41-4b7d-9a9b-4a3c583f97c1".to_string(),
+        kpc_id: "c3a59b16-1f6e-4c12-9f0d-5b74b1f146ae".to_string(),
+    },
+    EncryptionZone {
+        zone_name: "test_department2".to_string(),
+        ez_id: "0c3b6e42-2c41-4b7d-9a9b-4a3c583f97c1".to_string(),
+        kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string(),
+    },
+    EncryptionZone {
+        zone_name: "test_department3".to_string(),
+        ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string(),
+        kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string(),
+    },
+    EncryptionZone {
+        zone_name: "test_department4".to_string(),
+        ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string(),
+        kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string(),
+    },
     ]);
 }
 
