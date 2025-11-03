@@ -34,11 +34,10 @@ export class ProvidersPanelComponent implements OnInit, AfterViewInit {
     this.dataSource_Providers.paginator = this.paginator;
   }
 
-  public async loadProviders() {
+  async loadProviders() {
     this.loading = true;
     try {
-      const providersJson = await kpc_fetch_all();
-      const providers: ProvidersTableStruct[] = JSON.parse(providersJson);
+      const providers: ProvidersTableStruct[] = JSON.parse(await kpc_fetch_all());
       this.dataSource_Providers = new MatTableDataSource<ProvidersTableStruct>(providers);
       this.dataSource_Providers.paginator = this.paginator;
     } catch (error) {

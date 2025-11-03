@@ -23,19 +23,35 @@
 
 }
 
+.title-toolbar {
+  background-image: linear-gradient(to right, #1b6369, #018894);
+  color: rgb(235, 235, 235);
+  display: flex;
+  justify-content: flex-start;
+  gap: 5vw;
+}
+
+.title-toolbar button{
+  border-radius: 2px;
+}
+
 .panel {
   height: auto;
   width: 75vw;
   border-radius: 2px o !important;
 }
+
 .logs-panel {
   height: auto;
   width: 75vw;
   border-radius: 2px o !important;
 }
 
+
 .sidenav-button {
+  justify-content: flex-start;
   border-radius: 2px;
+  width: 320px;
 }
 
 .sidenav {

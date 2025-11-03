@@ -2,10 +2,10 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import initWASM, { provision_config_request } from '../../../assets/wasm_backend/wasm_backend.js';
 import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from "@angular/router";
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-sign-in',
   imports: [MatInputModule, MatFormFieldModule, MatButtonModule, FormsModule],

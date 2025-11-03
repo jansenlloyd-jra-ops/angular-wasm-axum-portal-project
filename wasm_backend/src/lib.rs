@@ -62,3 +62,20 @@ pub async fn kpc_fetch_all() -> Result<JsValue, JsValue> {
         .map_err(|e| JsValue::from_str(&e.to_string()))?;
     Ok(JsValue::from_str(&res_req))
 }
+
+#[wasm_bindgen]
+pub async fn users_fetch_all() -> Result<JsValue, JsValue> {
+    let client = Client::new();
+
+    let res = client
+        .post(format!("{}/v1/portal/users", ORIGIN))
+        .send()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+
+    let res_req = res
+        .text()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+    Ok(JsValue::from_str(&res_req))
+}

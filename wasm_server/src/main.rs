@@ -29,6 +29,13 @@ pub struct Providers {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct Users{
+    name: String,
+    email: String,
+    kpc_id: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct ProviderRequest {
     name: String,
     configuration: Value,
@@ -87,7 +94,22 @@ lazy_static! {
             }"#.to_string(),
         }
     ]);
+
+    pub static ref USER_VECTOR: Mutex<Vec<Users>> = Mutex::new(vec![  
+        Users { name: "Alice Johnson".to_string(), email: "alice.johnson@example.com".to_string(), kpc_id: "c3a59b16-1f6e-4c12-9f0d-5b74b1f146ae".to_string()},
+        Users { name: "Brian Kim".to_string(), email: "brian.kim@example.com".to_string(), kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string()},
+        Users { name: "Carla Mendoza".to_string(), email: "carla.mendoza@example.com".to_string(), kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string()},
+        Users { name: "David Smith".to_string(), email: "david.smith@example.com".to_string(), kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string()},
+        Users { name: "Alice Johnson".to_string(), email: "alice@example.com".to_string(), kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string()},
+        Users { name: "Bob Smith".to_string(), email: "bob@example.com".to_string(), kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string()},
+        Users { name: "Carol White".to_string(), email: "carol@example.com".to_string(), kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string()},
+        Users { name: "David Brown".to_string(), email: "david@example.com".to_string(), kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string()},
+        Users { name: "Eve Green".to_string(), email: "eve@example.com".to_string(), kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string()},
+        Users { name: "Frank Blue".to_string(), email: "frank@example.com".to_string(), kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string()}
+    ]);
 }
+
+
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct WrapResp {
@@ -116,6 +138,7 @@ async fn main() {
         .route("/v1/portal/kms-configuration/{config}", post(configure_kpc))
         .route("/v1/portal/provision-configuration", post(config_handler))
         .route("/v1/portal/kpc-fetch", post(return_kpcs))
+        .route("/v1/portal/users", post(return_users))
         // .route("/portal/callback", post(print_raw))
         .fallback(handler_404)
         .layer(cors);
@@ -174,6 +197,11 @@ async fn provider_record(provider: &str, name: String, config: String) {
 
 async fn return_kpcs() -> impl IntoResponse {
     let mut vec_guard = PROVIDER_VECTOR.lock().unwrap();
+    Json(json!(*vec_guard))
+}
+
+async fn return_users() -> impl IntoResponse {
+    let mut vec_guard = USER_VECTOR.lock().unwrap();
     Json(json!(*vec_guard))
 }
 

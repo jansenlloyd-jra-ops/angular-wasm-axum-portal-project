@@ -33,21 +33,44 @@
 
 <mat-sidenav-container>
   <mat-sidenav class="sidenav" mode="side" opened [disableClose]="true">
-    <mat-toolbar style="background-image: linear-gradient(to right, #1b6369, #018894); color: rgb(235, 235, 235);">
+    <mat-toolbar class="title-toolbar">
       <h3>Admin Portal</h3>
+      <button matButton="elevated" (click)="logOut()">Log-out</button>
     </mat-toolbar>
     <mat-list>
       <mat-divider></mat-divider>
+
       <mat-list-item class="sidenav-container">
         <div>
-          <button matButton="elevated" class="sidenav-button" (click)="toggleAllPanels()">{{ allExpanded ? 'Collapse All' : 'Expand All' }}</button>
+          <button matButton="elevated" class="sidenav-button" (click)="toggleAllPanels()">
+            {{ allExpanded ? 'Collapse All' : 'Expand All' }}</button>
         </div>
       </mat-list-item>
+
       <mat-list-item class="sidenav-container">
         <div>
           <button matButton="elevated" class="sidenav-button" (click)="openKPC()">Create Key Provider Config</button>
         </div>
       </mat-list-item>
+
+      <mat-list-item class="sidenav-container">
+        <div>
+          <button matButton="elevated" class="sidenav-button">Revoke keys</button>
+        </div>
+      </mat-list-item>
+
+      <mat-list-item class="sidenav-container">
+        <div>
+          <button matButton="elevated" class="sidenav-button">Export keys</button>
+        </div>
+      </mat-list-item>
+
+      <mat-list-item class="sidenav-container">
+        <div>
+          <button matButton="elevated" class="sidenav-button">System Information</button>
+        </div>
+      </mat-list-item>
+
     </mat-list>
   </mat-sidenav>
 
@@ -63,7 +86,7 @@
         </mat-expansion-panel-header>
         <app-user-panel></app-user-panel>
       </mat-expansion-panel>
-      
+
       <mat-expansion-panel #user_panel expanded class="panel">
         <mat-expansion-panel-header>
           <mat-panel-title> Providers </mat-panel-title>

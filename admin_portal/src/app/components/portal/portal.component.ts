@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChildren, QueryList, type OnInit, AfterViewInit } from '@angular/core';
-import initWasm, { kpc_fetch_all } from '../../../assets/wasm_backend/wasm_backend.js';
+import initWasm from '../../../assets/wasm_backend/wasm_backend.js';
 import { KpcPanelComponent } from '../panels/kpc-panel/kpc-panel.js';
 import { UserPanelComponent } from '../panels/user-panel/user-panel.js';
 import { LogsPanelComponent } from '../panels/logs-panel/logs-panel.js';
+import { Router } from "@angular/router";
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,12 +33,14 @@ import { ProvidersPanelComponent } from '../panels/providers-panel/providers-pan
 })
 
 export class PortalComponent implements OnInit, AfterViewInit {
+  [x: string]: any;
   ngOnInit() {
     if (typeof window !== 'undefined') {
       // only initialize wasm in browser, not during SSR
       initWasm();
     }
   }
+  constructor(private router: Router) {}
   readonly dialog = inject(MatDialog);
   configResponse: any = { google: {}, aws: {}, azure: {} };
   openKPC(): void {
@@ -69,6 +72,9 @@ export class PortalComponent implements OnInit, AfterViewInit {
     this.allExpanded = shouldExpand;
   }
 
+  logOut(){
+    this.router.navigate(['/']);
+  }
   // async fetchAllKPC() {
   //   let configs = await kpc_fetch_all();
   //   console.log(configs);
