@@ -1,9 +1,5 @@
 use axum::{
-    Json, Router,
-    extract::Path,
-    http::request,
-    response::{Html, IntoResponse},
-    routing::{get_service, post},
+    Json, Router, body::to_bytes, extract::{Path, Query, Request}, response::{Html, IntoResponse}, routing::{get, get_service, post}
 };
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
 use rand::RngCore;
@@ -19,6 +15,35 @@ use tower_http::{
     services::ServeDir,
 };
 use uuid::Uuid;
+
+use reqwest::Client;
+
+#[derive(Debug, Serialize, Deserialize)]
+struct GoogleTokenResponse {
+    access_token: String,
+    expires_in: Option<u64>,
+    refresh_token: Option<String>,
+    scope: Option<String>,
+    token_type: String,
+    id_token: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct GoogleTokenParameters {
+  code: String, 
+  client_id: String,
+  redirect_uri: String,
+  grant_type: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct GoogleTokenRequest {
+  code: String, 
+  scope: String,
+  authuser: String,
+  hd: String,
+  prompt: String,
+}
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Providers {
@@ -169,6 +194,9 @@ async fn main() {
         .route("/v1/portal/provision-configuration", post(config_handler))
         .route("/v1/portal/kpc-fetch", post(return_kpcs))
         .route("/v1/portal/users", post(return_users))
+        .route("/v1/portal/authorization", post(check_authorization))
+        .route("/v1/portal/callback", get(token_request))
+        .route("/v1/portal/callback/authorize", get(print_raw))
         // .route("/portal/callback", post(print_raw))
         .fallback(handler_404)
         .layer(cors);
@@ -178,6 +206,10 @@ async fn main() {
     axum::serve(tokio::net::TcpListener::bind(addr).await.unwrap(), app)
         .await
         .unwrap();
+}
+
+async fn check_authorization()-> impl IntoResponse{
+    Json(json!({"authorized": false}))
 }
 
 async fn config_handler(Json(value): Json<Value>) -> impl IntoResponse {
@@ -235,16 +267,51 @@ async fn return_users() -> impl IntoResponse {
     Json(json!(*vec_guard))
 }
 
-// pub async fn print_raw(req: Request) -> impl IntoResponse {
-//     let (parts, body) = req.into_parts();
-//     let bytes = to_bytes(body, usize::MAX).await.unwrap();
-//     let body_str = String::from_utf8_lossy(&bytes);
+async fn token_request(Query(params): Query<GoogleTokenRequest>) -> impl IntoResponse {
+    println!("Query Parameters: {:?}", params);
+    token_exchange("181370640671-rb2l88739bspe0ifbnsq7inoniqu4mgu.apps.googleusercontent.com",
+     "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", &params.code, "authorization_code").await;
+    "OK"
+}
 
-//     println!("--- REQUEST INFO ---");
-//     println!("Method: {}", parts.method);
-//     println!("URI: {}", parts.uri);
-//     println!("Headers: {:#?}", parts.headers);
-//     println!("Body:\n{}", body_str);
+async fn print_raw(req: Request) -> impl IntoResponse{
+    println!("Request: {:?}", req);
+    let (parts, body) = req.into_parts();
+    let bytes = to_bytes(body, usize::MAX).await.unwrap();
+    let body_str = String::from_utf8_lossy(&bytes);
 
-//     "OK"
-// }
+    println!("--- REQUEST INFO ---");
+    println!("Method: {}", parts.method);
+    println!("URI: {}", parts.uri);
+    println!("Headers: {:#?}", parts.headers);
+    println!("Body:\n{}", body_str);
+    "OK"
+}
+
+
+
+pub async fn token_exchange(client_id: &str, client_secret: &str, code: &str, grant_type: &str) {
+    let client = Client::new();
+
+    // ⚙️ Google token endpoint
+    let token_url = "https://oauth2.googleapis.com/token";
+    let redirect_uri = "http://localhost:8080/v1/portal/callback";
+
+    let res = client
+        .post(token_url)
+        .form(&[
+        ("code", code),
+        ("client_id", client_id),
+        ("client_secret", client_secret),
+        ("redirect_uri", redirect_uri),
+        ("grant_type", grant_type),
+        ])
+        .send()
+        .await.unwrap()
+        .error_for_status().unwrap(); // returns error if not 2xx
+    println!("response: {:?}", res);
+    // // 📥 Parse response into struct
+    // let token_response = serde_json::;
+
+    // Ok(token_response)
+}

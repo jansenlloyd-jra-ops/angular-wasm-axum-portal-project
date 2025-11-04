@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import initWASM, { provision_config_request } from '../../../assets/wasm_backend/wasm_backend.js';
+import initWASM, { is_authenticated, provision_config_request } from '../../../assets/wasm_backend/wasm_backend.js';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,10 +19,10 @@ export class SiginInComponent {
       initWASM();
     }
   }
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
   requesting = signal<boolean>(false);
   signin = signal<boolean>(true);
-  configResponse: any = { response: ''};
+  configResponse: any = { response: '' };
   provisionConfig = JSON.stringify(
     {
       provider: "google",
@@ -31,7 +31,7 @@ export class SiginInComponent {
       client_id: "181370640671-rb2l88739bspe0ifbnsq7inoniqu4mgu.apps.googleusercontent.com",
       client_secret: "",
       discovery_url: "https://accounts.google.com/.well-known/openid-configuration",
-      redirect_uri: "http://localhost:8080/portal/callback",
+      redirect_uri: "http://localhost:8080/v1/portal/callback",
       issuer: "https://accounts.google.com"
     },
     null,
@@ -53,12 +53,23 @@ export class SiginInComponent {
   signinRequest() {
     this.signin.set(true);
     let jsonRequest = JSON.parse(this.provisionConfig);
-    // let signURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${jsonRequest.client_id}&redirect_uri=${jsonRequest.redirect_uri}&response_type=code&scope=${jsonRequest.scope}`
+    let signURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${jsonRequest.client_id}&redirect_uri=${jsonRequest.redirect_uri}&response_type=code&scope=${jsonRequest.scope}`
     // console.log(signURL);
-    // window.open(signURL, "_blank");
-    this.router.navigate(['/dashboard']);
-    setTimeout(() => {
-      this.signin.set(false);
-    }, 20);
+    window.open(signURL, "_blank");
+    const interval = setInterval(async () => {
+      const result = JSON.parse(await is_authenticated());
+      if (result.authorized) {
+        clearInterval(interval);
+        this.router.navigate(['/dashboard']);
+      } else {
+        this.signin.set(false)
+      };
+    }, 1000)
+
+
+    // this.router.navigate(['/dashboard']);
+    // setTimeout(() => {
+    //   this.signin.set(false);
+    // }, 20);
   }
 }
