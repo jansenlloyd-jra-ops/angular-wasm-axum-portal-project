@@ -269,7 +269,7 @@ async fn return_users() -> impl IntoResponse {
 
 async fn token_request(Query(params): Query<GoogleTokenRequest>) -> impl IntoResponse {
     println!("Query Parameters: {:?}", params);
-    token_exchange("181370640671-rb2l88739bspe0ifbnsq7inoniqu4mgu.apps.googleusercontent.com",
+    token_exchange("",
      "", &params.code, "authorization_code").await;
     "OK"
 }
