@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, NgZone } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import initWASM, { is_authenticated, provision_config_request } from '../../../assets/wasm_backend/wasm_backend.js';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,7 +19,7 @@ export class SiginInComponent {
       initWASM();
     }
   }
-  constructor(private router: Router) { }
+  constructor(private router: Router, private zone: NgZone) { }
   requesting = signal<boolean>(false);
   signin = signal<boolean>(true);
   configResponse: any = { response: '' };
@@ -60,11 +60,14 @@ export class SiginInComponent {
       const result = JSON.parse(await is_authenticated());
       if (result.authorized) {
         clearInterval(interval);
-        this.router.navigate(['/dashboard']);
+        this.zone.run(() => {
+          window.close();
+          this.router.navigate(['/dashboard']);
+        });
       } else {
-        this.signin.set(false)
-      };
-    }, 1000)
+        this.signin.set(false);
+      }
+    }, 1000);
 
 
     // this.router.navigate(['/dashboard']);

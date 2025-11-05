@@ -74,6 +74,8 @@ pub struct ProviderRequest {
     configuration: Value,
 }
 lazy_static! {
+    pub static ref AUTH_TOKEN_VECTOR: Mutex<Vec<String>> = Mutex::new(Vec::new());
+    
     pub static ref PROVIDER_VECTOR: Mutex<Vec<Providers>> = Mutex::new(vec![
         Providers {
             name: "test_department1_key".to_string(),
@@ -209,7 +211,15 @@ async fn main() {
 }
 
 async fn check_authorization()-> impl IntoResponse{
-    Json(json!({"authorized": false}))
+    println!("\n\n\n requesting to access...\n\n\n");
+    let mut vec_guard = AUTH_TOKEN_VECTOR.lock().unwrap();
+    if !vec_guard.is_empty(){
+        // vec_guard.pop();
+        Json(json!({"authorized": true}))
+    }else {
+        Json(json!({"authorized": false}))
+    }
+    
 }
 
 async fn config_handler(Json(value): Json<Value>) -> impl IntoResponse {
@@ -269,9 +279,11 @@ async fn return_users() -> impl IntoResponse {
 
 async fn token_request(Query(params): Query<GoogleTokenRequest>) -> impl IntoResponse {
     println!("Query Parameters: {:?}", params);
-    token_exchange("",
-     "", &params.code, "authorization_code").await;
-    "OK"
+    token_exchange("Client_I",
+     "Client_SECRET", &params.code, "authorization_code").await;
+    print!("\n\nrequested.");
+
+    Json(json!({"authorization": "access granted"}))
 }
 
 async fn print_raw(req: Request) -> impl IntoResponse{
@@ -288,12 +300,9 @@ async fn print_raw(req: Request) -> impl IntoResponse{
     "OK"
 }
 
-
-
 pub async fn token_exchange(client_id: &str, client_secret: &str, code: &str, grant_type: &str) {
     let client = Client::new();
 
-    // ⚙️ Google token endpoint
     let token_url = "https://oauth2.googleapis.com/token";
     let redirect_uri = "http://localhost:8080/v1/portal/callback";
 
@@ -310,8 +319,10 @@ pub async fn token_exchange(client_id: &str, client_secret: &str, code: &str, gr
         .await.unwrap()
         .error_for_status().unwrap(); // returns error if not 2xx
     println!("response: {:?}", res);
-    // // 📥 Parse response into struct
-    // let token_response = serde_json::;
-
-    // Ok(token_response)
+    println!("Status: {}", res.status());
+    let bearer_token = res.text().await.unwrap();
+    println!("Response Body: {}", bearer_token);
+    let mut vec_guard = AUTH_TOKEN_VECTOR.lock().unwrap();
+    vec_guard.push(bearer_token);
+    drop(vec_guard);
 }
