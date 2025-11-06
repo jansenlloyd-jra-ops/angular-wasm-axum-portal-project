@@ -1,3 +1,4 @@
+use wasm_server::{ProvisionConfig, Providers, Users, EncryptionZone, ProviderRequest, GoogleTokenRequest};
 use axum::{
     Json, Router, body::to_bytes, extract::{Path, Query, Request}, response::{Html, IntoResponse}, routing::{get, get_service, post}
 };
@@ -7,75 +8,31 @@ use rand::rngs::OsRng;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 // use sha3::{Digest, Sha3_256};
-use lazy_static::lazy_static; // or once_cell::sync::OnceCell
-use std::sync::Mutex;
+use lazy_static::lazy_static; 
+use tokio::sync::Mutex;
 use std::{net::SocketAddr, vec};
 use tower_http::{
     cors::{Any, CorsLayer},
     services::ServeDir,
 };
 use uuid::Uuid;
-
 use reqwest::Client;
 
-#[derive(Debug, Serialize, Deserialize)]
-struct GoogleTokenResponse {
-    access_token: String,
-    expires_in: Option<u64>,
-    refresh_token: Option<String>,
-    scope: Option<String>,
-    token_type: String,
-    id_token: Option<String>,
-}
 
-#[derive(Debug, Serialize, Deserialize)]
-struct GoogleTokenParameters {
-  code: String, 
-  client_id: String,
-  redirect_uri: String,
-  grant_type: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-struct GoogleTokenRequest {
-  code: String, 
-  scope: String,
-  authuser: String,
-  hd: String,
-  prompt: String,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct Providers {
-    name: String,
-    provider: String,
-    kpc_id: String,
-    configuration: String,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct Users{
-    name: String,
-    email: String,
-    ez_id: String,
-}
-
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct EncryptionZone{
-    zone_name: String,
-    ez_id: String,
-    kpc_id: String,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct ProviderRequest {
-    name: String,
-    configuration: Value,
-}
 lazy_static! {
     pub static ref AUTH_TOKEN_VECTOR: Mutex<Vec<String>> = Mutex::new(Vec::new());
     
+    pub static ref PROVISION_VECTOR: Mutex<ProvisionConfig> = Mutex::new(ProvisionConfig {
+        provider: "".to_string(),
+        scope: "".to_string(),
+        provision_type: "".to_string(),
+        client_id: "".to_string(),
+        client_secret: "".to_string(),
+        discovery_url: "".to_string(),
+        redirect_uri: "".to_string(),
+        issuer: "".to_string(),
+    });
+
     pub static ref PROVIDER_VECTOR: Mutex<Vec<Providers>> = Mutex::new(vec![
         Providers {
             name: "test_department1_key".to_string(),
@@ -193,7 +150,7 @@ async fn main() {
             get_service(ServeDir::new("assets/admin_portal")),
         )
         .route("/v1/portal/kms-configuration/{config}", post(configure_kpc))
-        .route("/v1/portal/provision-configuration", post(config_handler))
+        .route("/v1/portal/provision-configuration", post(configure_provision))
         .route("/v1/portal/kpc-fetch", post(return_kpcs))
         .route("/v1/portal/users", post(return_users))
         .route("/v1/portal/authorization", post(check_authorization))
@@ -212,7 +169,7 @@ async fn main() {
 
 async fn check_authorization()-> impl IntoResponse{
     println!("\n\n\n requesting to access...\n\n\n");
-    let mut vec_guard = AUTH_TOKEN_VECTOR.lock().unwrap();
+    let vec_guard = AUTH_TOKEN_VECTOR.lock().await;
     if !vec_guard.is_empty(){
         // vec_guard.pop();
         Json(json!({"authorized": true}))
@@ -222,8 +179,13 @@ async fn check_authorization()-> impl IntoResponse{
     
 }
 
-async fn config_handler(Json(value): Json<Value>) -> impl IntoResponse {
+async fn configure_provision(Json(value): Json<String>) -> impl IntoResponse {
+    println!("PROVISION");
+    let mut vec_guard = PROVISION_VECTOR.lock().await;
     println!("{:?}", value);
+    let provision_config: ProvisionConfig = serde_json::from_str(&value).unwrap();
+    *vec_guard = provision_config;
+    drop(vec_guard);
     Json(json!({"response": "CONFIGURATION UPLOADED"}))
 }
 
@@ -247,16 +209,14 @@ async fn configure_kpc(
     )
 }
 
-async fn handler_404() -> impl IntoResponse {
-    Html("<h1>404 - Not Found</h1>")
-}
+
 // Used lazy static since there is no sql logic/query here that I implemented.
 // it can be changed into sql query later on that fetches a table or any data required
 // but for testing purposes the said crate is used.
 async fn provider_record(provider: &str, name: String, config: String) {
     let kpc_id = Uuid::new_v4().to_string();
     println!("{} {}:  {}", provider, name, config);
-    let mut vec_guard = PROVIDER_VECTOR.lock().unwrap();
+    let mut vec_guard = PROVIDER_VECTOR.lock().await;
     let record = Providers {
         name: name,
         kpc_id: kpc_id,
@@ -268,21 +228,22 @@ async fn provider_record(provider: &str, name: String, config: String) {
 }
 
 async fn return_kpcs() -> impl IntoResponse {
-    let mut vec_guard = PROVIDER_VECTOR.lock().unwrap();
+    let vec_guard = PROVIDER_VECTOR.lock().await;
     Json(json!(*vec_guard))
 }
 
 async fn return_users() -> impl IntoResponse {
-    let mut vec_guard = USER_VECTOR.lock().unwrap();
+    let vec_guard = USER_VECTOR.lock().await;
     Json(json!(*vec_guard))
 }
 
 async fn token_request(Query(params): Query<GoogleTokenRequest>) -> impl IntoResponse {
     println!("Query Parameters: {:?}", params);
-    token_exchange("Client_ID",
-     "Client_SECRET", &params.code, "authorization_code").await;
+    // fetch respective provision for the tenant
+    let vec_guard = PROVISION_VECTOR.lock().await;
+    token_exchange(&vec_guard.client_id,
+     &vec_guard.client_secret, &params.code, "authorization_code").await;
     print!("\n\nrequested.");
-
     Json(json!({"authorization": "access granted"}))
 }
 
@@ -322,7 +283,11 @@ pub async fn token_exchange(client_id: &str, client_secret: &str, code: &str, gr
     println!("Status: {}", res.status());
     let bearer_token = res.text().await.unwrap();
     println!("Response Body: {}", bearer_token);
-    let mut vec_guard = AUTH_TOKEN_VECTOR.lock().unwrap();
+    let mut vec_guard = AUTH_TOKEN_VECTOR.lock().await;
     vec_guard.push(bearer_token);
     drop(vec_guard);
+}
+
+async fn handler_404() -> impl IntoResponse {
+    Html("<h1>404 - Not Found</h1>")
 }

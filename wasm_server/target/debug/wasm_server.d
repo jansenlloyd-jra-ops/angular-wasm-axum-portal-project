@@ -1,1 +1,1 @@
-/home/seg-workstation-three/Documents/Workspace/angular/portal/Portal/wasm_server/target/debug/wasm_server: /home/seg-workstation-three/Documents/Workspace/angular/portal/Portal/wasm_server/src/main.rs
+/home/seg-workstation-three/Documents/Workspace/angular/portal/Portal/wasm_server/target/debug/wasm_server: /home/seg-workstation-three/Documents/Workspace/angular/portal/Portal/wasm_server/src/lib.rs /home/seg-workstation-three/Documents/Workspace/angular/portal/Portal/wasm_server/src/main.rs

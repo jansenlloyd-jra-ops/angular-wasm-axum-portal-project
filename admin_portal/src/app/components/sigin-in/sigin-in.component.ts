@@ -1,10 +1,10 @@
-import { Component, signal, NgZone } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import initWASM, { is_authenticated, provision_config_request } from '../../../assets/wasm_backend/wasm_backend.js';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { Router } from '@angular/router';
+import { Router, UrlSerializer } from '@angular/router';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,12 +14,16 @@ import { Router } from '@angular/router';
 })
 export class SiginInComponent {
   ngOnInit() {
+    const redirect = localStorage.getItem('redirectAfterReload');
+    if (redirect) {
+      localStorage.removeItem('redirectAfterReload');
+      this.router.navigate([redirect]);
+    }
     if (typeof window !== 'undefined') {
-      // ✅ only initialize wasm in browser, not during SSR
       initWASM();
     }
   }
-  constructor(private router: Router, private zone: NgZone) { }
+  constructor(private router: Router) { }
   requesting = signal<boolean>(false);
   signin = signal<boolean>(true);
   configResponse: any = { response: '' };
@@ -27,9 +31,9 @@ export class SiginInComponent {
     {
       provider: "google",
       scope: "openid email profile",
-      type: "oidc",
-      client_id: "181370640671-rb2l88739bspe0ifbnsq7inoniqu4mgu.apps.googleusercontent.com",
-      client_secret: "",
+      provision_type: "oidc",
+      client_id: "CLIENT_ID",
+      client_secret: "CLIENT_SECRET",
       discovery_url: "https://accounts.google.com/.well-known/openid-configuration",
       redirect_uri: "http://localhost:8080/v1/portal/callback",
       issuer: "https://accounts.google.com"
@@ -60,16 +64,23 @@ export class SiginInComponent {
       const result = JSON.parse(await is_authenticated());
       if (result.authorized) {
         clearInterval(interval);
-        this.zone.run(() => {
-          window.close();
-          this.router.navigate(['/dashboard']);
-        });
+        this.signin.set(false);
+        localStorage.setItem('redirectAfterReload', '/dashboard');
+        window.location.reload();
       } else {
         this.signin.set(false);
       }
     }, 1000);
 
+    // this.zone.run(() => {
+        //   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        //     this.router.navigate(['/dashboard']);
+        //   });
+        // });
 
+    // let url = this.serializer.serialize(this.router.createUrlTree(['/dashbard']));
+    // window.open(url, '_blank')
+    // window.close();
     // this.router.navigate(['/dashboard']);
     // setTimeout(() => {
     //   this.signin.set(false);

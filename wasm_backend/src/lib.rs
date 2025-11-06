@@ -96,3 +96,6 @@ pub async fn is_authenticated() -> Result<JsValue, JsValue>{
         .map_err(|e| JsValue::from_str(&e.to_string()))?;
     Ok(JsValue::from_str(&res_req))
 }
+
+#[wasm_bindgen]
+pub async  fn  add_user_request(name: &str, email: &str)
