@@ -104,7 +104,7 @@ pub async fn is_authenticated() -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
-        .post(format!("{}/v1/portal/authorization", ORIGIN))
+        .post(format!("{}/v1/portal/authorization/sign-in", ORIGIN))
         .send()
         .await
         .map_err(|e| JsValue::from_str(&e.to_string()))?;
@@ -115,6 +115,25 @@ pub async fn is_authenticated() -> Result<JsValue, JsValue> {
         .map_err(|e| JsValue::from_str(&e.to_string()))?;
     Ok(JsValue::from_str(&res_req))
 }
+
+#[wasm_bindgen]
+pub async fn is_logging_out() -> Result<JsValue, JsValue> {
+    let client = Client::new();
+
+    let res = client
+        .post(format!("{}/v1/portal/authorization/sign-out", ORIGIN))
+        .send()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+
+    let res_req = res
+        .text()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+    Ok(JsValue::from_str(&res_req))
+}
+
+
 
 #[wasm_bindgen]
 pub async fn add_user_request(name: &str, email: &str, ez_id: &str) -> Result<JsValue, JsValue> {

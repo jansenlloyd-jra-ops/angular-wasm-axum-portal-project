@@ -153,7 +153,7 @@ async fn main() {
         .route("/v1/portal/kpc", post(return_kpcs))
         .route("/v1/portal/users", post(return_users))
         .route("/v1/portal/ez", post(return_ez))
-        .route("/v1/portal/authorization", post(check_authorization))
+        .route("/v1/portal/authorization/{log}", post(check_authorization))
         .route("/v1/portal/callback", get(token_request))
         .route("/v1/portal/callback/authorize", get(print_raw))
         .route("/v1/portal/add-user", post(add_user))
@@ -169,13 +169,13 @@ async fn main() {
         .unwrap();
 }
 
-async fn check_authorization()-> impl IntoResponse{
+async fn check_authorization(Path(log): Path<String>)-> impl IntoResponse{
     println!("\n\n\n requesting to access...\n\n\n");
-    let vec_guard = AUTH_TOKEN_VECTOR.lock().await;
-    if !vec_guard.is_empty(){
-        // vec_guard.pop();
+    let mut vec_guard = AUTH_TOKEN_VECTOR.lock().await;
+    if !vec_guard.is_empty() && (log.as_str() == "sign-in") {
         Json(json!({"authorized": true}))
     }else {
+        vec_guard.pop();
         Json(json!({"authorized": false}))
     }
     
