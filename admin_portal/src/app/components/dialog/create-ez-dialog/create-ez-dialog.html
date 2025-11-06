@@ -1,0 +1,34 @@
+<div class="column">
+  <h4>Create Encryption Zone Dialog</h4>
+  <mat-form-field appearance="outline" class="input">
+    <mat-label>Enter Name</mat-label>
+    <input matInput [(ngModel)]="name">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="input">
+    <mat-label>Select Key Provider Configuration</mat-label>
+    <mat-select [(ngModel)]="selectedKPC">
+      @for (kpc of key_providers; track kpc.name + kpc.provider) {
+      <mat-option [value]="kpc">
+        {{ kpc.name }}
+        ({{ kpc.provider }})
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <div class="row">
+    <div class="button-group">
+      <button mat-raised-button class="button" (click)="submitCreateEZ()" [disabled]="requesting()">
+        Submit
+      </button>
+      <button mat-raised-button class="button" (click)="clear()">
+        Clear
+      </button>
+    </div>
+    @if (requesting()) {
+    <div class="response-container">
+      <pre style="color: forestgreen;">{{ createEZResponse.response }}</pre>
+    </div>
+    }
+  </div>
+</div>

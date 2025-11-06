@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChildren, QueryList, type OnInit, AfterViewInit } from '@angular/core';
 import initWasm from '../../../assets/wasm_backend/wasm_backend.js';
-import { KpcPanelComponent } from '../panels/kpc-panel/kpc-panel.js';
+import { CreateKPCDialog } from '../dialog/create-kpc-dialog/create-kpc-dialog.js';
 import { UserPanelComponent } from '../panels/user-panel/user-panel.js';
 import { LogsPanelComponent } from '../panels/logs-panel/logs-panel.js';
 import { Router } from "@angular/router";
@@ -12,6 +12,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 import { ProvidersPanelComponent } from '../panels/providers-panel/providers-panel.js';
+import { EzPanelComponent } from '../panels/ez-panel/ez-panel.js';
 
 @Component({
   selector: 'portal-demo',
@@ -24,6 +25,7 @@ import { ProvidersPanelComponent } from '../panels/providers-panel/providers-pan
     MatToolbarModule,
     MatExpansionModule,
     UserPanelComponent,
+    EzPanelComponent,
     ProvidersPanelComponent
     // LogsPanelComponent
   ],
@@ -45,7 +47,7 @@ export class PortalComponent implements OnInit, AfterViewInit {
 
   readonly dialog = inject(MatDialog);
   openKPC(): void {
-    this.dialog.open(KpcPanelComponent, {
+    this.dialog.open(CreateKPCDialog, {
       panelClass: 'no-default-dialog',
       autoFocus: false,
     });

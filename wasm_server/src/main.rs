@@ -1,4 +1,4 @@
-use wasm_server::{AddUserRequest, EncryptionZone, GoogleTokenRequest, ProviderRequest, Providers, ProvisionConfig, Users};
+use wasm_server::{AddUserRequest, CreateEZRequest, EncryptionZone, GoogleTokenRequest, ProviderRequest, Providers, ProvisionConfig, Users};
 use axum::{
     Json, Router, body::to_bytes, extract::{Path, Query, Request}, response::{Html, IntoResponse}, routing::{get, get_service, post}
 };
@@ -124,7 +124,6 @@ lazy_static! {
 }
 
 
-
 #[derive(Debug, Deserialize, Clone, Serialize)]
 pub struct WrapResp {
     pub wrapped_key: String,
@@ -158,6 +157,7 @@ async fn main() {
         .route("/v1/portal/callback", get(token_request))
         .route("/v1/portal/callback/authorize", get(print_raw))
         .route("/v1/portal/add-user", post(add_user))
+        .route("/v1/portal/create-ez", post(create_ez))
         // .route("/portal/callback", post(print_raw))
         .fallback(handler_404)
         .layer(cors);
@@ -301,9 +301,24 @@ async fn handler_404() -> impl IntoResponse {
 // add user here query function here I just implement a simple global variable storing
 pub async fn add_user(Json(add_user_request): Json<AddUserRequest>) -> impl IntoResponse{
     let mut vec_guard = USER_VECTOR.lock().await;
-    vec_guard.push(Users {name: add_user_request.name.to_string(), email: add_user_request.email.to_string(), ez_id: add_user_request.ez_id.to_string()});
+    vec_guard.push(Users {
+        name: add_user_request.name.to_string(), 
+        email: add_user_request.email.to_string(), 
+        ez_id: add_user_request.ez_id.to_string() });
     drop(vec_guard);
     Json(
-        json!({"response": "USER ADDED TO THE ZONE"}),
+        json!({"response": "USER ADDED TO THE ZONE"})
+    )
+}
+// returning ez_id
+pub async fn create_ez(Json(create_ez_request): Json<CreateEZRequest>)-> impl IntoResponse{
+    let mut vec_guard = EZ_VECTOR.lock().await;
+    let ez_id_generated = Uuid::new_v4();
+    vec_guard.push (EncryptionZone { 
+        zone_name: create_ez_request.zone_name.to_string(), 
+        ez_id: ez_id_generated.to_string(), 
+        kpc_id: create_ez_request.kpc_id.to_string() });
+    Json(
+        json!({"response": format!("ENCRYPTION ZONE CREATED {}",ez_id_generated.to_string())})
     )
 }

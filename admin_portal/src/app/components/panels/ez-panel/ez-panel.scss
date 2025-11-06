@@ -1,0 +1,53 @@
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button {
+  background: #e7f4f5;
+  border-radius: 2px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+
+  table {
+    height: 20vh;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  th,
+  td {
+    font-size: 14px;
+    text-align: left;
+    padding: 8px 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .col-zone_name {
+    width: 20%;
+  }
+
+  .col-ez_id {
+    width: 40%;
+  }
+
+  .col-kpc_id {
+    width: 40%;
+  }
+
+  mat-paginator {
+    margin-top: 10px;
+  }
+}

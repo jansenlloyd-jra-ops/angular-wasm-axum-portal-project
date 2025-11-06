@@ -1,0 +1,30 @@
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource_EZ" class="mat-elevation-z8">
+    <ng-container matColumnDef="zone_name">
+      <th mat-header-cell *matHeaderCellDef class="col-zone_name">Zone name</th>
+      <td mat-cell *matCellDef="let element">{{element.zone_name}}</td>
+    </ng-container>
+    <ng-container matColumnDef="ez_id">
+      <th mat-header-cell *matHeaderCellDef class="col-ez_id">Encryption Zone ID</th>
+      <td mat-cell *matCellDef="let element">{{element.ez_id}}</td>
+    </ng-container>
+    <ng-container matColumnDef="kpc_id">
+      <th mat-header-cell *matHeaderCellDef class="col-kpc_id">KPC ID</th>
+      <td mat-cell *matCellDef="let element">{{element.kpc_id}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns:displayedColumns"></tr>
+  </table>
+  <div class="toolbar">
+    <div class="button-group">
+      <button mat-raised-button color="primary" class="button" (click)="loadEZ()" [disabled]="loading">
+        {{ loading ? 'Refreshing...' : 'Refresh' }}
+      </button>
+      <button mat-raised-button color="primary" class="button" (click)="openAddUserDialog()" [disabled]="loading">
+        {{ loading ? 'Creating...' : 'Create Encryption Zone' }}
+      </button>
+    </div>
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

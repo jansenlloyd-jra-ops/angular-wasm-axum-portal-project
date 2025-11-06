@@ -17,10 +17,16 @@ pub struct ProviderRequest {
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct AddUserRequest{
+pub struct AddUserRequest {
     pub name: String,
     pub email: String,
     pub ez_id: String,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct CreateEZRequest {
+    pub zone_name: String,
+    pub kpc_id: String,
 }
 // ===========================================================================
 #[derive(Debug, Serialize, Deserialize)]

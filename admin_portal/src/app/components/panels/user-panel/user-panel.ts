@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
 import { users_fetch_all } from '../../../../assets/wasm_backend/wasm_backend';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
-import { AddUserDialog } from '../add-user-dialog/add-user-dialog';
-import { EditUserDialog } from '../edit-user-dialog/edit-user-dialog';
+import { AddUserDialog } from '../../dialog/add-user-dialog/add-user-dialog';
+import { EditUserDialog } from '../../dialog/edit-user-dialog/edit-user-dialog';
 
 export interface UserTableStruct {
   name: string,

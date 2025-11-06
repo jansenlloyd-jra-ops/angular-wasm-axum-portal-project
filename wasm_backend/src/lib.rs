@@ -64,6 +64,7 @@ pub async fn kpc_fetch_all() -> Result<JsValue, JsValue> {
     Ok(JsValue::from_str(&res_req))
 }
 
+
 #[wasm_bindgen]
 pub async fn users_fetch_all() -> Result<JsValue, JsValue> {
     let client = Client::new();
@@ -122,6 +123,24 @@ pub async fn add_user_request(name: &str, email: &str, ez_id: &str) -> Result<Js
     let res = client
         .post(format!("{}/v1/portal/add-user", ORIGIN))
         .json(&json!({"name": name, "email": email, "ez_id": ez_id}))
+        .send()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+    let res_req = res
+        .text()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+    Ok(JsValue::from_str(&res_req))
+}
+
+
+#[wasm_bindgen]
+pub async fn create_ez_request(zone_name: &str, kpc_id: &str) -> Result<JsValue, JsValue> {
+    let client = Client::new();
+
+    let res = client
+        .post(format!("{}/v1/portal/create-ez", ORIGIN))
+        .json(&json!({"zone_name": zone_name, "kpc_id": kpc_id}))
         .send()
         .await
         .map_err(|e| JsValue::from_str(&e.to_string()))?;

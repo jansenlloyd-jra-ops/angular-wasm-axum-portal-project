@@ -1,0 +1,39 @@
+<div class="column">
+  <h4>Edit User Dialog</h4>
+  <mat-form-field appearance="outline" class="input">
+    <mat-label>Enter Name</mat-label>
+    <input matInput [(ngModel)]="name">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="input">
+    <mat-label>Enter Email</mat-label>
+    <input matInput [(ngModel)]="email">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="input">
+    <mat-label>Select Encryption Zone</mat-label>
+    <mat-select [(ngModel)]="selectedEz">
+      @for (ez of encryption_zone; track ez.zone_name + ez.ez_id) {
+      <mat-option [value]="ez">
+        {{ ez.zone_name }}
+        ({{ez.ez_id}})
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <div class="row">
+    <div class="button-group">
+      <button mat-raised-button class="button" (click)="submitEditUser()" [disabled]="requesting()">
+        Submit
+      </button>
+      <button mat-raised-button class="button" (click)="clear()">
+        Clear
+      </button>
+    </div>
+    @if (requesting()) {
+    <div class="response-container">
+      <pre style="color: forestgreen;">{{ addUserResponse.response }}</pre>
+    </div>
+    }
+  </div>
+</div>
