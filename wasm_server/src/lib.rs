@@ -1,6 +1,28 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+// Request structures ========================================================
+#[derive(Debug, Serialize, Deserialize)]
+pub struct GoogleTokenRequest {
+    pub code: String,
+    pub scope: String,
+    pub authuser: String,
+    pub hd: String,
+    pub prompt: String,
+}
 
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct ProviderRequest {
+    pub name: String,
+    pub configuration: Value,
+}
+
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct AddUserRequest{
+    pub name: String,
+    pub email: String,
+    pub ez_id: String,
+}
+// ===========================================================================
 #[derive(Debug, Serialize, Deserialize)]
 pub struct GoogleTokenResponse {
     pub access_token: String,
@@ -31,15 +53,6 @@ pub struct GoogleTokenParameters {
     pub grant_type: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct GoogleTokenRequest {
-    pub code: String,
-    pub scope: String,
-    pub authuser: String,
-    pub hd: String,
-    pub prompt: String,
-}
-
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct Providers {
     pub name: String,
@@ -60,10 +73,4 @@ pub struct EncryptionZone {
     pub zone_name: String,
     pub ez_id: String,
     pub kpc_id: String,
-}
-
-#[derive(Debug, Deserialize, Serialize, Clone)]
-pub struct ProviderRequest {
-    pub name: String,
-    pub configuration: Value,
 }

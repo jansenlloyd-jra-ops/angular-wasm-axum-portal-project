@@ -9,7 +9,8 @@ const ORIGIN: &str = "http://127.0.0.1:8080";
 pub async fn provision_config_request(config: &str) -> Result<JsValue, JsValue> {
     let client = Client::new();
 
-    let req: Value = serde_json::to_value(config).unwrap();
+    let req: Value = serde_json::from_str(config)
+        .map_err(|e| JsValue::from_str(&format!("Invalid JSON: {}", e)))?;
 
     let res = client
         .post(format!("{}/v1/portal/provision-configuration", ORIGIN))
@@ -29,7 +30,7 @@ pub async fn provision_config_request(config: &str) -> Result<JsValue, JsValue> 
 pub async fn kpc_config_request(name: &str, config: &str) -> Result<JsValue, JsValue> {
     let client = Client::new();
 
-    let req: serde_json::Value = serde_json::from_str(config)
+    let req: Value = serde_json::from_str(config)
         .map_err(|e| JsValue::from_str(&format!("Invalid JSON: {}", e)))?;
 
     let res = client
@@ -51,7 +52,7 @@ pub async fn kpc_fetch_all() -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
-        .post(format!("{}/v1/portal/kpc-fetch", ORIGIN))
+        .post(format!("{}/v1/portal/kpc", ORIGIN))
         .send()
         .await
         .map_err(|e| JsValue::from_str(&e.to_string()))?;
@@ -81,7 +82,24 @@ pub async fn users_fetch_all() -> Result<JsValue, JsValue> {
 }
 
 #[wasm_bindgen]
-pub async fn is_authenticated() -> Result<JsValue, JsValue>{
+pub async fn ez_fetch_all() -> Result<JsValue, JsValue> {
+    let client = Client::new();
+
+    let res = client
+        .post(format!("{}/v1/portal/ez", ORIGIN))
+        .send()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+
+    let res_req = res
+        .text()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+    Ok(JsValue::from_str(&res_req))
+}
+
+#[wasm_bindgen]
+pub async fn is_authenticated() -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
@@ -98,4 +116,18 @@ pub async fn is_authenticated() -> Result<JsValue, JsValue>{
 }
 
 #[wasm_bindgen]
-pub async  fn  add_user_request(name: &str, email: &str)
+pub async fn add_user_request(name: &str, email: &str, ez_id: &str) -> Result<JsValue, JsValue> {
+    let client = Client::new();
+
+    let res = client
+        .post(format!("{}/v1/portal/add-user", ORIGIN))
+        .json(&json!({"name": name, "email": email, "ez_id": ez_id}))
+        .send()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+    let res_req = res
+        .text()
+        .await
+        .map_err(|e| JsValue::from_str(&e.to_string()))?;
+    Ok(JsValue::from_str(&res_req))
+}

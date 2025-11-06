@@ -1,4 +1,4 @@
-use wasm_server::{ProvisionConfig, Providers, Users, EncryptionZone, ProviderRequest, GoogleTokenRequest};
+use wasm_server::{AddUserRequest, EncryptionZone, GoogleTokenRequest, ProviderRequest, Providers, ProvisionConfig, Users};
 use axum::{
     Json, Router, body::to_bytes, extract::{Path, Query, Request}, response::{Html, IntoResponse}, routing::{get, get_service, post}
 };
@@ -35,7 +35,7 @@ lazy_static! {
 
     pub static ref PROVIDER_VECTOR: Mutex<Vec<Providers>> = Mutex::new(vec![
         Providers {
-            name: "test_department1_key".to_string(),
+            name: "key_config_1".to_string(),
             provider: "google".to_string(),
             kpc_id: "c3a59b16-1f6e-4c12-9f0d-5b74b1f146ae".to_string(),
             configuration: r#"{
@@ -53,7 +53,7 @@ lazy_static! {
             }"#.to_string(),
         },
         Providers {
-            name: "test_department2_key".to_string(),
+            name: "key_config_2".to_string(),
             provider: "aws".to_string(),
             kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string(),
             configuration: r#"{
@@ -64,7 +64,7 @@ lazy_static! {
             }"#.to_string(),
         },
         Providers {
-            name: "test_department3_key".to_string(),
+            name: "key_config_3".to_string(),
             provider: "aws".to_string(),
             kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string(),
             configuration: r#"{
@@ -75,7 +75,7 @@ lazy_static! {
             }"#.to_string(),
         },
         Providers {
-            name: "test_department4_key".to_string(),
+            name: "key_config_4".to_string(),
             provider: "azure".to_string(),
             kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string(),
             configuration: r#"{
@@ -151,11 +151,13 @@ async fn main() {
         )
         .route("/v1/portal/kms-configuration/{config}", post(configure_kpc))
         .route("/v1/portal/provision-configuration", post(configure_provision))
-        .route("/v1/portal/kpc-fetch", post(return_kpcs))
+        .route("/v1/portal/kpc", post(return_kpcs))
         .route("/v1/portal/users", post(return_users))
+        .route("/v1/portal/ez", post(return_ez))
         .route("/v1/portal/authorization", post(check_authorization))
         .route("/v1/portal/callback", get(token_request))
         .route("/v1/portal/callback/authorize", get(print_raw))
+        .route("/v1/portal/add-user", post(add_user))
         // .route("/portal/callback", post(print_raw))
         .fallback(handler_404)
         .layer(cors);
@@ -178,12 +180,11 @@ async fn check_authorization()-> impl IntoResponse{
     }
     
 }
-
-async fn configure_provision(Json(value): Json<String>) -> impl IntoResponse {
-    println!("PROVISION");
+// sql query function store config
+async fn configure_provision(Json(provision_config): Json<ProvisionConfig>) -> impl IntoResponse {
+    // let provision_config: ProvisionConfig = serde_json::from_str(&value).unwrap();
     let mut vec_guard = PROVISION_VECTOR.lock().await;
-    println!("{:?}", value);
-    let provision_config: ProvisionConfig = serde_json::from_str(&value).unwrap();
+    println!("{:?}", provision_config);
     *vec_guard = provision_config;
     drop(vec_guard);
     Json(json!({"response": "CONFIGURATION UPLOADED"}))
@@ -191,15 +192,15 @@ async fn configure_provision(Json(value): Json<String>) -> impl IntoResponse {
 
 async fn configure_kpc(
     Path(provider): Path<String>,
-    Json(request): Json<ProviderRequest>,
+    Json(provider_request): Json<ProviderRequest>,
 ) -> impl IntoResponse {
-    println!("{:?}", request);
-    // let request: ProviderRequest = serde_json::from_value(body).unwrap();
-    let config = request.configuration.to_string();
+    println!("{:?}", provider_request);
+    // let provider_request: ProviderRequest = serde_json::from_value(body).unwrap();
+    let config = provider_request.configuration.to_string();
     match provider.as_str() {
-        "google" => provider_record("google", request.name, config).await,
-        "aws" => provider_record("aws", request.name, config).await,
-        "azure" => provider_record("azure", request.name, config).await,
+        "google" => provider_record("google", provider_request.name, config).await,
+        "aws" => provider_record("aws", provider_request.name, config).await,
+        "azure" => provider_record("azure", provider_request.name, config).await,
         _ => println!("unknown configuration"),
     };
     // add how to response key provider id
@@ -237,12 +238,17 @@ async fn return_users() -> impl IntoResponse {
     Json(json!(*vec_guard))
 }
 
-async fn token_request(Query(params): Query<GoogleTokenRequest>) -> impl IntoResponse {
-    println!("Query Parameters: {:?}", params);
+async fn return_ez() -> impl IntoResponse {
+    let vec_guard = EZ_VECTOR.lock().await;
+    Json(json!(*vec_guard))
+}
+
+async fn token_request(Query(token_request): Query<GoogleTokenRequest>) -> impl IntoResponse {
+    println!("Query Parameters: {:?}", token_request);
     // fetch respective provision for the tenant
     let vec_guard = PROVISION_VECTOR.lock().await;
     token_exchange(&vec_guard.client_id,
-     &vec_guard.client_secret, &params.code, "authorization_code").await;
+     &vec_guard.client_secret, &token_request.code, "authorization_code").await;
     print!("\n\nrequested.");
     Json(json!({"authorization": "access granted"}))
 }
@@ -290,4 +296,14 @@ pub async fn token_exchange(client_id: &str, client_secret: &str, code: &str, gr
 
 async fn handler_404() -> impl IntoResponse {
     Html("<h1>404 - Not Found</h1>")
+}
+
+// add user here query function here I just implement a simple global variable storing
+pub async fn add_user(Json(add_user_request): Json<AddUserRequest>) -> impl IntoResponse{
+    let mut vec_guard = USER_VECTOR.lock().await;
+    vec_guard.push(Users {name: add_user_request.name.to_string(), email: add_user_request.email.to_string(), ez_id: add_user_request.ez_id.to_string()});
+    drop(vec_guard);
+    Json(
+        json!({"response": "USER ADDED TO THE ZONE"}),
+    )
 }

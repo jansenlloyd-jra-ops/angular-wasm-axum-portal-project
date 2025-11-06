@@ -18,6 +18,9 @@
   <div class="toolbar">
     <div class="button-group">
       <button mat-raised-button color="primary" class="button" (click)="loadUsers()" [disabled]="loading">
+        {{ loading ? 'Refreshing...' : 'Refresh' }}
+      </button>
+      <button mat-raised-button color="primary" class="button" (click)="openKPC()" [disabled]="loading">
         {{ loading ? 'Adding...' : 'Add User' }}
       </button>
       <button mat-raised-button color="primary" class="button" (click)="loadUsers()" [disabled]="loading">

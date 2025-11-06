@@ -15,12 +15,6 @@ import { MatInputModule } from '@angular/material/input';
 })
 
 export class KpcPanelComponent {
-  serveTime = signal<string>('');
-  serverResponse: any = {};
-  serveTimeResp = signal<string>('');
-  signin = signal<boolean>(true);
-
-  // ====================================================================================
   public configResponse: any = { google: {}, aws: {}, azure: {} };
   requesting = signal<boolean>(false);
   copiedPrompt = signal<string>('');
@@ -113,6 +107,4 @@ export class KpcPanelComponent {
       console.error('Failed to copy: ', err);
     });
   }
-  // ====================================================================================
-
 }

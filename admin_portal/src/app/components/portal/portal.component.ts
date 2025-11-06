@@ -41,8 +41,9 @@ export class PortalComponent implements OnInit, AfterViewInit {
     }
   }
   constructor(private router: Router) {}
-  readonly dialog = inject(MatDialog);
   configResponse: any = { google: {}, aws: {}, azure: {} };
+
+  readonly dialog = inject(MatDialog);
   openKPC(): void {
     this.dialog.open(KpcPanelComponent, {
       panelClass: 'no-default-dialog',
