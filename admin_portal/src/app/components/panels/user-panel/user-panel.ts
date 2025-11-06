@@ -6,6 +6,7 @@ import { users_fetch_all } from '../../../../assets/wasm_backend/wasm_backend';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserDialog } from '../add-user-dialog/add-user-dialog';
+import { EditUserDialog } from '../edit-user-dialog/edit-user-dialog';
 
 export interface UserTableStruct {
   name: string,
@@ -25,14 +26,22 @@ export class UserPanelComponent {
   loading = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  
+
   readonly dialog = inject(MatDialog);
-  openKPC(): void {
+  openAddUserDialog(): void {
     this.dialog.open(AddUserDialog, {
       panelClass: 'no-default-dialog',
       autoFocus: false,
     });
   }
+  
+  openEditUserDialog(): void {
+    this.dialog.open(EditUserDialog, {
+      panelClass: 'no-default-dialog',
+      autoFocus: false,
+    });
+  }
+
   async ngOnInit(): Promise<void> {
     await this.loadUsers();
   }

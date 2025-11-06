@@ -1,5 +1,5 @@
 <div class="column">
-  <h4>Add User Dialog</h4>
+  <h4>Edit User Dialog</h4>
   <mat-form-field appearance="outline" class="input">
     <mat-label>Enter Name</mat-label>
     <input matInput [(ngModel)]="name">
@@ -23,7 +23,7 @@
   </mat-form-field>
   <div class="row">
     <div class="button-group">
-      <button mat-raised-button class="button" (click)="submitAddUser()" [disabled]="requesting()">
+      <button mat-raised-button class="button" (click)="submitEditUser()" [disabled]="requesting()">
         Submit
       </button>
       <button mat-raised-button class="button" (click)="clear()">

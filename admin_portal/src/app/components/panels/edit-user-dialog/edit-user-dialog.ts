@@ -1,25 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule, MatLabel } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from "@angular/forms";
 import { ez_fetch_all, add_user_request } from '../../../../assets/wasm_backend/wasm_backend';
-
-export interface EncryptionZoneStruct {
-  zone_name: string,
-  ez_id: string,
-  kpc_id: string,
-}
+import { EncryptionZoneStruct } from '../add-user-dialog/add-user-dialog';
 
 @Component({
-  selector: 'app-add-user-dialog',
+  selector: 'app-edit-user-dialog',
   imports: [MatFormFieldModule, MatInputModule, MatSelectModule, MatLabel, MatButtonModule, CommonModule, FormsModule],
-  templateUrl: './add-user-dialog.html',
-  styleUrl: './add-user-dialog.scss'
+  templateUrl: './edit-user-dialog.html',
+  styleUrl: './edit-user-dialog.scss'
 })
-export class AddUserDialog implements OnInit {
+export class EditUserDialog implements OnInit {
   name = '';
   email = '';
   encryption_zone: EncryptionZoneStruct[] = [];
@@ -34,7 +29,7 @@ export class AddUserDialog implements OnInit {
     }
   };
 
-  async submitAddUser() {
+  async submitEditUser() {
     this.requesting.set(true);
     if (this.name != '' && this.email != '' && this.selectedEz != null) {
       let res = await add_user_request(this.name, this.email, this.selectedEz.ez_id);
