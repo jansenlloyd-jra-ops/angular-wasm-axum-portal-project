@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import initWASM, { is_authenticated, provision_config_request } from '../../../assets/wasm_backend/wasm_backend.js';
+import initWASM, { request_authenticate, request_provision } from '../../../assets/wasm_backend/wasm_backend.js';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -44,7 +44,7 @@ export class SiginInComponent {
 
   async provisionRequest() {
     this.requesting.set(true);
-    let res = await provision_config_request(this.provisionConfig);
+    let res = await request_provision(this.provisionConfig);
     this.configResponse = JSON.parse(res);
     setTimeout(() => {
       this.requesting.set(false);
@@ -61,7 +61,7 @@ export class SiginInComponent {
     // // console.log(signURL);
     // window.open(signURL, "_blank");
     const interval = setInterval(async () => {
-      const result = JSON.parse(await is_authenticated());
+      const result = JSON.parse(await request_authenticate());
       if (result.authorized) {
         clearInterval(interval);
         this.signin.set(false);

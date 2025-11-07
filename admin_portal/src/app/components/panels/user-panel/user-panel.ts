@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, inject } from '@angular/co
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
-import { users_fetch_all } from '../../../../assets/wasm_backend/wasm_backend';
+import { fetch_all_user } from '../../../../assets/wasm_backend/wasm_backend';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { AddUserDialog } from '../../dialog/add-user-dialog/add-user-dialog';
@@ -53,7 +53,7 @@ export class UserPanelComponent {
   async loadUsers() {
     this.loading = true;
     try {
-      const providers: UserTableStruct[] = JSON.parse(await users_fetch_all());
+      const providers: UserTableStruct[] = JSON.parse(await fetch_all_user());
       this.dataSource_User = new MatTableDataSource<UserTableStruct>(providers);
       this.dataSource_User.paginator = this.paginator;
     } catch (error) {

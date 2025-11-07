@@ -6,7 +6,7 @@ use wasm_bindgen::prelude::*;
 const ORIGIN: &str = "http://127.0.0.1:8080";
 
 #[wasm_bindgen]
-pub async fn provision_config_request(config: &str) -> Result<JsValue, JsValue> {
+pub async fn request_provision(config: &str) -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let req: Value = serde_json::from_str(config)
@@ -27,7 +27,7 @@ pub async fn provision_config_request(config: &str) -> Result<JsValue, JsValue> 
 }
 
 #[wasm_bindgen]
-pub async fn kpc_config_request(name: &str, config: &str) -> Result<JsValue, JsValue> {
+pub async fn request_create_kpc(name: &str, config: &str) -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let req: Value = serde_json::from_str(config)
@@ -48,7 +48,7 @@ pub async fn kpc_config_request(name: &str, config: &str) -> Result<JsValue, JsV
 }
 
 #[wasm_bindgen]
-pub async fn kpc_fetch_all() -> Result<JsValue, JsValue> {
+pub async fn fetch_all_kpc() -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
@@ -66,7 +66,7 @@ pub async fn kpc_fetch_all() -> Result<JsValue, JsValue> {
 
 
 #[wasm_bindgen]
-pub async fn users_fetch_all() -> Result<JsValue, JsValue> {
+pub async fn fetch_all_user() -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
@@ -83,7 +83,7 @@ pub async fn users_fetch_all() -> Result<JsValue, JsValue> {
 }
 
 #[wasm_bindgen]
-pub async fn ez_fetch_all() -> Result<JsValue, JsValue> {
+pub async fn fetch_all_ez() -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
@@ -100,7 +100,7 @@ pub async fn ez_fetch_all() -> Result<JsValue, JsValue> {
 }
 
 #[wasm_bindgen]
-pub async fn is_authenticated() -> Result<JsValue, JsValue> {
+pub async fn request_authenticate() -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
@@ -117,7 +117,7 @@ pub async fn is_authenticated() -> Result<JsValue, JsValue> {
 }
 
 #[wasm_bindgen]
-pub async fn is_logging_out() -> Result<JsValue, JsValue> {
+pub async fn request_log_out() -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
@@ -136,7 +136,7 @@ pub async fn is_logging_out() -> Result<JsValue, JsValue> {
 
 
 #[wasm_bindgen]
-pub async fn add_user_request(name: &str, email: &str, ez_id: &str) -> Result<JsValue, JsValue> {
+pub async fn request_add_user(name: &str, email: &str, ez_id: &str) -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
@@ -154,7 +154,7 @@ pub async fn add_user_request(name: &str, email: &str, ez_id: &str) -> Result<Js
 
 
 #[wasm_bindgen]
-pub async fn create_ez_request(zone_name: &str, kpc_id: &str) -> Result<JsValue, JsValue> {
+pub async fn request_create_ez(zone_name: &str, kpc_id: &str) -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client

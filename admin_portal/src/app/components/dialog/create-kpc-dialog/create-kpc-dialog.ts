@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, type OnInit, signal } from '@angular/core';
-import { kpc_config_request } from '../../../../assets/wasm_backend/wasm_backend.js';
+import { request_create_kpc } from '../../../../assets/wasm_backend/wasm_backend.js';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -89,7 +89,7 @@ export class CreateKPCDialog {
   }
   async kpc_request() {
     this.requesting.set(true);
-    let res = await kpc_config_request(String(this.selectedProvider).toLowerCase(), this.selectedProviderConfig);
+    let res = await request_create_kpc(String(this.selectedProvider).toLowerCase(), this.selectedProviderConfig);
     this.configResponse[this.selectedProvider] = JSON.parse(res);
     setTimeout(() => {
       this.requesting.set(false);

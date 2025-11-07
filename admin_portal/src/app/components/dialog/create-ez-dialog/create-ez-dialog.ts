@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { kpc_fetch_all, create_ez_request } from '../../../../assets/wasm_backend/wasm_backend';
+import { fetch_all_kpc, request_create_ez } from '../../../../assets/wasm_backend/wasm_backend';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -29,7 +29,7 @@ export class CreateEzDialog {
   createEZResponse: any = {};
   async ngOnInit(): Promise<void> {
     try {
-      this.key_providers = JSON.parse(await kpc_fetch_all());
+      this.key_providers = JSON.parse(await fetch_all_kpc());
     } catch (e) {
       console.error('Failed to fetch encryption zones', e);
     }
@@ -38,7 +38,7 @@ export class CreateEzDialog {
   async submitCreateEZ() {
     this.requesting.set(true);
     if (this.name != ''  && this.selectedKPC != null) {
-      let res = await create_ez_request(this.name, this.selectedKPC.kpc_id);
+      let res = await request_create_ez(this.name, this.selectedKPC.kpc_id);
       this.createEZResponse = JSON.parse(res);
     }
     setTimeout(() => {

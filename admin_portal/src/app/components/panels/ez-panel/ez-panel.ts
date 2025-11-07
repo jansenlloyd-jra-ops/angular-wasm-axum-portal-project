@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ez_fetch_all } from '../../../../assets/wasm_backend/wasm_backend';
+import { fetch_all_ez } from '../../../../assets/wasm_backend/wasm_backend';
 import { CreateEzDialog } from '../../dialog/create-ez-dialog/create-ez-dialog';
 
 export interface EncryptionZoneTableStruct {
@@ -45,7 +45,7 @@ export class EzPanelComponent {
   async loadEZ() {
     this.loading = true;
     try {
-      const providers: EncryptionZoneTableStruct[] = JSON.parse(await ez_fetch_all());
+      const providers: EncryptionZoneTableStruct[] = JSON.parse(await fetch_all_ez());
       this.dataSource_EZ = new MatTableDataSource<EncryptionZoneTableStruct>(providers);
       this.dataSource_EZ.paginator = this.paginator;
     } catch (error) {

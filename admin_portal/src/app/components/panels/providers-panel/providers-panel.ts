@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { kpc_fetch_all } from '../../../../assets/wasm_backend/wasm_backend';
+import { fetch_all_kpc } from '../../../../assets/wasm_backend/wasm_backend';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
@@ -37,7 +37,7 @@ export class ProvidersPanelComponent implements OnInit, AfterViewInit {
   async loadProviders() {
     this.loading = true;
     try {
-      const providers: ProvidersTableStruct[] = JSON.parse(await kpc_fetch_all());
+      const providers: ProvidersTableStruct[] = JSON.parse(await fetch_all_kpc());
       this.dataSource_Providers = new MatTableDataSource<ProvidersTableStruct>(providers);
       this.dataSource_Providers.paginator = this.paginator;
     } catch (error) {

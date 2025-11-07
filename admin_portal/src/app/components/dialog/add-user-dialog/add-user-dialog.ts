@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule, MatLabel } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from "@angular/forms";
-import { ez_fetch_all, add_user_request } from '../../../../assets/wasm_backend/wasm_backend';
+import { fetch_all_ez, request_add_user } from '../../../../assets/wasm_backend/wasm_backend';
 
 export interface EncryptionZoneStruct {
   zone_name: string,
@@ -28,7 +28,7 @@ export class AddUserDialog implements OnInit {
   addUserResponse: any = {};
   async ngOnInit(): Promise<void> {
     try {
-      this.encryption_zone = JSON.parse(await ez_fetch_all());
+      this.encryption_zone = JSON.parse(await fetch_all_ez());
     } catch (e) {
       console.error('Failed to fetch encryption zones', e);
     }
@@ -37,7 +37,7 @@ export class AddUserDialog implements OnInit {
   async submitAddUser() {
     this.requesting.set(true);
     if (this.name != '' && this.email != '' && this.selectedEz != null) {
-      let res = await add_user_request(this.name, this.email, this.selectedEz.ez_id);
+      let res = await request_add_user(this.name, this.email, this.selectedEz.ez_id);
       this.addUserResponse = JSON.parse(res);
     }
     setTimeout(() => {

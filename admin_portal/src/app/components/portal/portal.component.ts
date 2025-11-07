@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, ViewChildren, QueryList, type OnInit, AfterViewInit } from '@angular/core';
-import initWasm, { is_logging_out } from '../../../assets/wasm_backend/wasm_backend.js';
+import initWasm, { request_log_out } from '../../../assets/wasm_backend/wasm_backend.js';
 import { CreateKPCDialog } from '../dialog/create-kpc-dialog/create-kpc-dialog.js';
 import { UserPanelComponent } from '../panels/user-panel/user-panel.js';
 import { LogsPanelComponent } from '../panels/logs-panel/logs-panel.js';
@@ -76,7 +76,7 @@ export class PortalComponent implements OnInit, AfterViewInit {
   }
 
   async logOut(){
-    await is_logging_out();
+    await request_log_out();
     this.router.navigate(['/']);
   }
   // async fetchAllKPC() {
