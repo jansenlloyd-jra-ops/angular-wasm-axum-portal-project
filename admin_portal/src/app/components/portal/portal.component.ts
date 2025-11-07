@@ -45,16 +45,8 @@ export class PortalComponent implements OnInit, AfterViewInit {
   constructor(private router: Router) {}
   configResponse: any = { google: {}, aws: {}, azure: {} };
 
-  readonly dialog = inject(MatDialog);
-  openKPC(): void {
-    this.dialog.open(CreateKPCDialog, {
-      panelClass: 'no-default-dialog',
-      autoFocus: false,
-    });
-  }
-
   @ViewChildren(MatExpansionPanel) panels!: QueryList<MatExpansionPanel>;
-  allExpanded = true; 
+  allExpanded = false; 
 
   ngAfterViewInit() {
     this.panels.forEach(panel => {

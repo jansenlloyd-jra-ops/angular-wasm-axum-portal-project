@@ -1,9 +1,11 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, inject } from '@angular/core';
 import { fetch_all_kpc } from '../../../../assets/wasm_backend/wasm_backend';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateKPCDialog } from '../../dialog/create-kpc-dialog/create-kpc-dialog';
 
 export interface ProvidersTableStruct {
   name: string;
@@ -45,6 +47,14 @@ export class ProvidersPanelComponent implements OnInit, AfterViewInit {
     } finally {
       this.loading = false;
     }
+  }
+
+  readonly dialog = inject(MatDialog);
+  openKPC(): void {
+    this.dialog.open(CreateKPCDialog, {
+      panelClass: 'no-default-dialog',
+      autoFocus: false,
+    });
   }
 
 }

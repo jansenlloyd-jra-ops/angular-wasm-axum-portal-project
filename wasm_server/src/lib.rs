@@ -26,6 +26,7 @@ pub struct AddUserRequest {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct CreateEZRequest {
     pub zone_name: String,
+    pub key_name: String,
     pub kpc_id: String,
 }
 // ===========================================================================
@@ -77,6 +78,7 @@ pub struct Users {
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct EncryptionZone {
     pub zone_name: String,
+    pub key_name: String,
     pub ez_id: String,
     pub kpc_id: String,
 }

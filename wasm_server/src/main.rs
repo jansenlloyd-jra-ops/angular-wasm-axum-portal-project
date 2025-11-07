@@ -102,21 +102,25 @@ lazy_static! {
     pub static ref EZ_VECTOR: Mutex<Vec<EncryptionZone>> = Mutex::new(vec![  
     EncryptionZone {
         zone_name: "test_department1".to_string(),
+        key_name: "test_department1_key".to_string(),
         ez_id: "0c3b6e42-2c41-4b7d-9a9b-4a3c583f97c1".to_string(),
         kpc_id: "c3a59b16-1f6e-4c12-9f0d-5b74b1f146ae".to_string(),
     },
     EncryptionZone {
         zone_name: "test_department2".to_string(),
+        key_name: "test_department2_key".to_string(),
         ez_id: "0c3b6e42-2c41-4b7d-9a9b-4a3c583f97c1".to_string(),
         kpc_id: "7d0a9323-92ff-4de8-9a67-38e9c6e10b7e".to_string(),
     },
     EncryptionZone {
         zone_name: "test_department3".to_string(),
+        key_name: "test_department3_key".to_string(),
         ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string(),
         kpc_id: "2fdd89ac-3a47-4b5f-8a11-9cfb2d94a052".to_string(),
     },
     EncryptionZone {
         zone_name: "test_department4".to_string(),
+        key_name: "test_department4_key".to_string(),
         ez_id: "9f87c9e4-bc71-4f3d-9b1b-023e3a745ee6".to_string(),
         kpc_id: "b4c76267-ef1b-4e63-bb03-1af5a6c4a1d4".to_string(),
     },
@@ -175,14 +179,17 @@ async fn check_authorization(Path(log): Path<String>)-> impl IntoResponse{
 }
 // sql query function store config
 async fn configure_provision(Json(provision_config): Json<ProvisionConfig>) -> impl IntoResponse {
+    // create a url link to response on sign-in
+    let sign_in_url = format!("https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id={}&redirect_uri={}&response_type=code&scope={}", 
+    &provision_config.client_id.as_str(), &provision_config.redirect_uri.as_str(), &provision_config.scope.as_str());
+
     // store provision claim for the tenant here.
     let mut vec_guard = PROVISION_VECTOR.lock().await;
     println!("{:?}", provision_config);
     *vec_guard = provision_config;
     drop(vec_guard);
-    // create a url link to response on sign-in
-    
-    Json(json!({"response": "CONFIGURATION UPLOADED"}))
+
+    Json(json!({"url": sign_in_url.as_str(),"response": "CONFIGURATION UPLOADED"}))
 }
 
 async fn configure_kpc(
@@ -244,7 +251,31 @@ async fn token_request(Query(token_request): Query<GoogleTokenRequest>) -> impl 
     token_exchange(&vec_guard.client_id,
      &vec_guard.client_secret, &token_request.code, "authorization_code").await;
     print!("\n\nrequested.");
-    Json(json!({"authorization": "access granted"}))
+    // Json(json!({"authorization": "access granted"}))
+    let auth_json = json!({
+        "authorization": "access granted"
+    });
+    let html = format!(
+        r#"
+        <!DOCTYPE html>
+        <html>
+          <body>
+            <script>
+              const data = {auth_json};
+              console.log('Sending data to opener:', data);
+              if (window.opener) {{
+                window.opener.postMessage(data, "http://localhost:4200");
+                window.close();
+              }} else {{
+                document.body.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+              }}
+            </script>
+          </body>
+        </html>
+        "#,
+        auth_json = auth_json
+    );
+    Html(html)
 }
 
 pub async fn token_exchange(client_id: &str, client_secret: &str, code: &str, grant_type: &str) {
@@ -292,6 +323,7 @@ pub async fn create_ez(Json(create_ez_request): Json<CreateEZRequest>)-> impl In
     let ez_id_generated = Uuid::new_v4();
     vec_guard.push (EncryptionZone { 
         zone_name: create_ez_request.zone_name.to_string(), 
+        key_name: create_ez_request.key_name.to_string(),
         ez_id: ez_id_generated.to_string(), 
         kpc_id: create_ez_request.kpc_id.to_string() });
     Json(

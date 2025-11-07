@@ -154,12 +154,12 @@ pub async fn request_add_user(name: &str, email: &str, ez_id: &str) -> Result<Js
 
 
 #[wasm_bindgen]
-pub async fn request_create_ez(zone_name: &str, kpc_id: &str) -> Result<JsValue, JsValue> {
+pub async fn request_create_ez(zone_name: &str, key_name: &str, kpc_id: &str) -> Result<JsValue, JsValue> {
     let client = Client::new();
 
     let res = client
         .post(format!("{}/v1/portal/create-ez", ORIGIN))
-        .json(&json!({"zone_name": zone_name, "kpc_id": kpc_id}))
+        .json(&json!({"zone_name": zone_name, "key_name": key_name, "kpc_id": kpc_id}))
         .send()
         .await
         .map_err(|e| JsValue::from_str(&e.to_string()))?;

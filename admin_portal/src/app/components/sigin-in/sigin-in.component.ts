@@ -56,10 +56,8 @@ export class SiginInComponent {
 
   signinRequest() {
     this.signin.set(true);
-    let jsonRequest = JSON.parse(this.provisionConfig);
-    // let signURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${jsonRequest.client_id}&redirect_uri=${jsonRequest.redirect_uri}&response_type=code&scope=${jsonRequest.scope}`
-    // // console.log(signURL);
-    // window.open(signURL, "_blank");
+    const login_pop_up = window.open(this.configResponse.url, 'LoginPopup',
+      'width=500,height=600,left=100,top=100');
     const interval = setInterval(async () => {
       const result = JSON.parse(await request_authenticate());
       if (result.authorized) {
@@ -73,10 +71,10 @@ export class SiginInComponent {
     }, 1000);
 
     // this.zone.run(() => {
-        //   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        //     this.router.navigate(['/dashboard']);
-        //   });
-        // });
+    //   this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    //     this.router.navigate(['/dashboard']);
+    //   });
+    // });
 
     // let url = this.serializer.serialize(this.router.createUrlTree(['/dashbard']));
     // window.open(url, '_blank')

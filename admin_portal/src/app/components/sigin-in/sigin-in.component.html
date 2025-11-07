@@ -7,7 +7,7 @@
   <div class="row">
     <button matButton="elevated" class="button" type="button" (click)="provisionRequest()"
       [disabled]="requesting()">provision</button>
-    @if (!requesting()){
+    @if (!requesting() && configResponse.url != ''){
     <button matButton="elevated" class="button" type="button" (click)="signinRequest()"
       [disabled]="signin()">sign-in</button>
     }

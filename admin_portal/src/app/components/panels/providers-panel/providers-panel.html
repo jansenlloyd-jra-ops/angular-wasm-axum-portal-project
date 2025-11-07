@@ -24,6 +24,9 @@
       <button mat-raised-button color="primary" class="button" (click)="loadProviders()" [disabled]="loading">
         {{ loading ? 'Refreshing...' : 'Refresh' }}
       </button>
+      <button mat-raised-button color="primary" class="button" (click)="openKPC()" [disabled]="loading">
+        {{ loading ? 'Creating...' : 'Create Key Provider Configuration' }}
+      </button>
     </div>
     <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>

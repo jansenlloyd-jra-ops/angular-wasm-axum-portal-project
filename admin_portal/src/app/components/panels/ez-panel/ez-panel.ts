@@ -9,6 +9,7 @@ import { CreateEzDialog } from '../../dialog/create-ez-dialog/create-ez-dialog';
 
 export interface EncryptionZoneTableStruct {
   zone_name: string,
+  key_name: string,
   ez_id: string,
   kpc_id: string,
 }
@@ -20,8 +21,8 @@ export interface EncryptionZoneTableStruct {
   styleUrl: './ez-panel.scss'
 })
 export class EzPanelComponent {
-  displayedColumns: string[] = ['zone_name', 'ez_id', 'kpc_id'];
-  dataSource_EZ = new MatTableDataSource<EncryptionZoneTableStruct>([{zone_name:"test", ez_id: "test", kpc_id:"test"}]);
+  displayedColumns: string[] = ['zone_name', 'key_name','ez_id', 'kpc_id'];
+  dataSource_EZ = new MatTableDataSource<EncryptionZoneTableStruct>();
   loading = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;

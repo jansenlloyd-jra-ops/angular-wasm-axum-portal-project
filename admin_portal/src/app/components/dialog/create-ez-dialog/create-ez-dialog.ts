@@ -22,7 +22,8 @@ export interface KeyProvidersStruct {
   styleUrl: './create-ez-dialog.scss'
 })
 export class CreateEzDialog {
-  name = '';
+  zone_name = '';
+  key_name = '';
   key_providers: KeyProvidersStruct[] = [];
   selectedKPC: KeyProvidersStruct | null = null;
   requesting = signal<boolean>(false);
@@ -37,8 +38,8 @@ export class CreateEzDialog {
 
   async submitCreateEZ() {
     this.requesting.set(true);
-    if (this.name != ''  && this.selectedKPC != null) {
-      let res = await request_create_ez(this.name, this.selectedKPC.kpc_id);
+    if (this.zone_name != '' && this.key_name != ''  && this.selectedKPC != null) {
+      let res = await request_create_ez(this.zone_name, this.key_name, this.selectedKPC.kpc_id);
       this.createEZResponse = JSON.parse(res);
     }
     setTimeout(() => {
@@ -48,7 +49,8 @@ export class CreateEzDialog {
   };
 
   async clear() {
-    this.name = '';
+    this.zone_name = '';
+    this.key_name = '';
     this.selectedKPC = null;
   }
 }

@@ -6,16 +6,18 @@ import { request_authenticate } from '../assets/wasm_backend/wasm_backend.js'
 export const authGuard: CanActivateFn = async (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   const router = inject(Router);
   try {
-    const authCheck: any = JSON.parse(await request_authenticate()); // <- request from server if there is an authenticated access await sign request
+    const authCheck: any = JSON.parse(await request_authenticate());
     console.log(authCheck);
-    if (authCheck) {
+    if (authCheck.authorized) {
       return authCheck.authorized;
     } else {
-      router.navigate(['']);
+      router.navigate(['/']);
+      window.alert("Unauthorized Access");
       return false;
     }
   } catch (err) {
-    router.navigate(['']);
+    router.navigate(['/']);
+    window.alert("Unauthorized Access");
     return false;
   }
 };

@@ -13,12 +13,6 @@
             {{ allExpanded ? 'Collapse All' : 'Expand All' }}</button>
         </div>
       </mat-list-item>
-
-      <mat-list-item class="sidenav-container">
-        <div>
-          <button matButton="elevated" class="sidenav-button" (click)="openKPC()">Create Key Provider Config</button>
-        </div>
-      </mat-list-item>
       
       <mat-list-item class="sidenav-container">
         <div>
@@ -47,9 +41,7 @@
       <mat-expansion-panel expanded class="panel">
         <mat-expansion-panel-header>
           <mat-panel-title> Users </mat-panel-title>
-          <mat-panel-description>
-            Allowed Users for Client Side Encryption
-          </mat-panel-description>
+
         </mat-expansion-panel-header>
         <app-user-panel></app-user-panel>
       </mat-expansion-panel>

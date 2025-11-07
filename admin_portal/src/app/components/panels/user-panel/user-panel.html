@@ -23,9 +23,9 @@
       <button mat-raised-button color="primary" class="button" (click)="openAddUserDialog()" [disabled]="loading">
         {{ loading ? 'Adding...' : 'Add User' }}
       </button>
-      <button mat-raised-button color="primary" class="button" (click)="openEditUserDialog()" [disabled]="loading">
+      <!-- <button mat-raised-button color="primary" class="button" (click)="openEditUserDialog()" [disabled]="loading">
         {{ loading ? 'Editing...' : 'Edit User' }}
-      </button>
+      </button> -->
     </div>
     <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>
