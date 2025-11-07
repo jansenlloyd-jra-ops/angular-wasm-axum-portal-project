@@ -46,7 +46,7 @@ export class PortalComponent implements OnInit, AfterViewInit {
   configResponse: any = { google: {}, aws: {}, azure: {} };
 
   @ViewChildren(MatExpansionPanel) panels!: QueryList<MatExpansionPanel>;
-  allExpanded = false; 
+  allExpanded = true; 
 
   ngAfterViewInit() {
     this.panels.forEach(panel => {
