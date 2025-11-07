@@ -57,9 +57,9 @@ export class SiginInComponent {
   signinRequest() {
     this.signin.set(true);
     let jsonRequest = JSON.parse(this.provisionConfig);
-    let signURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${jsonRequest.client_id}&redirect_uri=${jsonRequest.redirect_uri}&response_type=code&scope=${jsonRequest.scope}`
-    // console.log(signURL);
-    window.open(signURL, "_blank");
+    // let signURL = `https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=${jsonRequest.client_id}&redirect_uri=${jsonRequest.redirect_uri}&response_type=code&scope=${jsonRequest.scope}`
+    // // console.log(signURL);
+    // window.open(signURL, "_blank");
     const interval = setInterval(async () => {
       const result = JSON.parse(await is_authenticated());
       if (result.authorized) {

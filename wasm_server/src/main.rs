@@ -143,22 +143,15 @@ async fn main() {
         .allow_methods(Any)
         .allow_headers(Any);
     let app = Router::new()
-        // .fallback_service(ServeDir::new("assets/admin_portal"));
-        .nest_service(
-            "/v1/portal",
-            get_service(ServeDir::new("assets/admin_portal")),
-        )
-        .route("/v1/portal/kms-configuration/{config}", post(configure_kpc))
         .route("/v1/portal/provision-configuration", post(configure_provision))
+        .route("/v1/portal/key-provider/{config}", post(configure_kpc))
         .route("/v1/portal/kpc", post(return_kpcs))
         .route("/v1/portal/users", post(return_users))
         .route("/v1/portal/ez", post(return_ez))
         .route("/v1/portal/authorization/{log}", post(check_authorization))
         .route("/v1/portal/callback", get(token_request))
-        .route("/v1/portal/callback/authorize", get(print_raw))
         .route("/v1/portal/add-user", post(add_user))
         .route("/v1/portal/create-ez", post(create_ez))
-        // .route("/portal/callback", post(print_raw))
         .fallback(handler_404)
         .layer(cors);
 
@@ -182,11 +175,13 @@ async fn check_authorization(Path(log): Path<String>)-> impl IntoResponse{
 }
 // sql query function store config
 async fn configure_provision(Json(provision_config): Json<ProvisionConfig>) -> impl IntoResponse {
-    // let provision_config: ProvisionConfig = serde_json::from_str(&value).unwrap();
+    // store provision claim for the tenant here.
     let mut vec_guard = PROVISION_VECTOR.lock().await;
     println!("{:?}", provision_config);
     *vec_guard = provision_config;
     drop(vec_guard);
+    // create a url link to response on sign-in
+    
     Json(json!({"response": "CONFIGURATION UPLOADED"}))
 }
 
@@ -209,7 +204,6 @@ async fn configure_kpc(
         json!({"response": "KEY PROVIDER CONFIGURATION CREATED", "key_provider_id": Uuid::new_v4().to_string()}),
     )
 }
-
 
 // Used lazy static since there is no sql logic/query here that I implemented.
 // it can be changed into sql query later on that fetches a table or any data required
@@ -253,20 +247,6 @@ async fn token_request(Query(token_request): Query<GoogleTokenRequest>) -> impl 
     Json(json!({"authorization": "access granted"}))
 }
 
-async fn print_raw(req: Request) -> impl IntoResponse{
-    println!("Request: {:?}", req);
-    let (parts, body) = req.into_parts();
-    let bytes = to_bytes(body, usize::MAX).await.unwrap();
-    let body_str = String::from_utf8_lossy(&bytes);
-
-    println!("--- REQUEST INFO ---");
-    println!("Method: {}", parts.method);
-    println!("URI: {}", parts.uri);
-    println!("Headers: {:#?}", parts.headers);
-    println!("Body:\n{}", body_str);
-    "OK"
-}
-
 pub async fn token_exchange(client_id: &str, client_secret: &str, code: &str, grant_type: &str) {
     let client = Client::new();
 
@@ -294,10 +274,6 @@ pub async fn token_exchange(client_id: &str, client_secret: &str, code: &str, gr
     drop(vec_guard);
 }
 
-async fn handler_404() -> impl IntoResponse {
-    Html("<h1>404 - Not Found</h1>")
-}
-
 // add user here query function here I just implement a simple global variable storing
 pub async fn add_user(Json(add_user_request): Json<AddUserRequest>) -> impl IntoResponse{
     let mut vec_guard = USER_VECTOR.lock().await;
@@ -321,4 +297,22 @@ pub async fn create_ez(Json(create_ez_request): Json<CreateEZRequest>)-> impl In
     Json(
         json!({"response": format!("ENCRYPTION ZONE CREATED {}",ez_id_generated.to_string())})
     )
+}
+
+async fn handler_404() -> impl IntoResponse {
+    Html("<h1>404 - Not Found</h1>")
+}
+
+async fn print_raw(req: Request) -> impl IntoResponse{
+    println!("Request: {:?}", req);
+    let (parts, body) = req.into_parts();
+    let bytes = to_bytes(body, usize::MAX).await.unwrap();
+    let body_str = String::from_utf8_lossy(&bytes);
+
+    println!("--- REQUEST INFO ---");
+    println!("Method: {}", parts.method);
+    println!("URI: {}", parts.uri);
+    println!("Headers: {:#?}", parts.headers);
+    println!("Body:\n{}", body_str);
+    "OK"
 }

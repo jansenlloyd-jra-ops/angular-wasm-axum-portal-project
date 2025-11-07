@@ -34,7 +34,7 @@ pub async fn kpc_config_request(name: &str, config: &str) -> Result<JsValue, JsV
         .map_err(|e| JsValue::from_str(&format!("Invalid JSON: {}", e)))?;
 
     let res = client
-        .post(format!("{}/v1/portal/kms-configuration/{}", ORIGIN, name))
+        .post(format!("{}/v1/portal/key-provider/{}", ORIGIN, name))
         .json(&req)
         .send()
         .await
